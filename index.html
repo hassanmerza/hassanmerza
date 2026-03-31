@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>🏭 Windoora - نظام حساب الشبابيك والأبواب</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1e3c72">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Windoora">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="نظام حساب الشبابيك والأبواب المتقدم">
+
+    <!-- Manifest & Icons -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        html{overflow-x:hidden;-webkit-text-size-adjust:100%}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;min-height:-webkit-fill-available;padding:10px;padding-top:env(safe-area-inset-top,10px);padding-bottom:env(safe-area-inset-bottom,10px);-webkit-overflow-scrolling:touch}
+        .container{max-width:1200px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+        .header{background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:#fff;padding:20px;text-align:center;position:sticky;top:0;z-index:100}
+        .header h1{font-size:2em;margin-bottom:5px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .header p{font-size:1em;opacity:.9}
+        .version-badge{display:inline-block;background:rgba(255,255,255,.2);padding:3px 12px;border-radius:20px;font-size:.7em;margin-top:5px}
+        .content{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px}
+        @media(max-width:768px){.content{grid-template-columns:1fr;gap:15px;padding:15px}}
+        .section{background:#f8f9fa;padding:20px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,.1)}
+        .section h2{color:#1e3c72;margin-bottom:15px;padding-bottom:10px;border-bottom:3px solid #667eea;font-size:1.3em}
+        .input-group{margin-bottom:12px}
+        .input-group label{display:block;margin-bottom:5px;color:#333;font-weight:700;font-size:.95em}
+        .input-group input,.input-group select{width:100%;padding:12px;border:2px solid #ddd;border-radius:10px;font-size:16px;transition:all .3s;-webkit-appearance:none;appearance:none;background:#fff}
+        .input-group input:focus,.input-group select:focus{border-color:#667eea;outline:0;box-shadow:0 0 10px rgba(102,126,234,.3)}
+        .input-group select{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat left 15px center;padding-left:35px}
+        .button{width:100%;padding:15px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:12px;font-size:1.1em;font-weight:700;cursor:pointer;margin-top:15px;transition:all .3s;touch-action:manipulation}
+        .button:active{transform:scale(.97);opacity:.9}
+        .result-box{background:#fff;padding:15px;border-radius:10px;margin-bottom:10px;border-right:4px solid #667eea}
+        .result-box h3{color:#1e3c72;margin-bottom:10px;font-size:1.1em}
+        .result-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;flex-wrap:wrap}
+        .result-item:last-child{border-bottom:none}
+        .result-label{color:#666;font-weight:500}
+        .result-value{color:#1e3c72;font-weight:700}
+        .total-box{background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%);color:#fff;padding:20px;border-radius:15px;margin-top:20px;text-align:center}
+        .total-box h3{font-size:1.3em;margin-bottom:10px}
+        .total-box .price{font-size:2.2em;font-weight:700;text-shadow:2px 2px 4px rgba(0,0,0,.2)}
+        .settings-section{grid-column:1/-1;background:#fff3cd;max-height:0;overflow:hidden;opacity:0;padding:0 20px;margin:0;border:none;transition:max-height .6s ease,opacity .4s ease,padding .4s ease,border .3s ease}
+        .settings-section.visible{max-height:5000px;opacity:1;padding:20px;border:2px solid #ffc107;transition:max-height .8s ease,opacity .4s ease,padding .4s ease,border .3s ease}
+        .settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+        .acc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;background:#e8f5e9;padding:15px;border-radius:10px;margin-top:15px;border:1px solid #c8e6c9}
+        .acc-grid h4{grid-column:1/-1;color:#2e7d32;margin-bottom:5px}
+        .summary-total{background:#e3f2fd;padding:10px;border-radius:5px;margin-top:10px;font-weight:700;color:#1e3c72;text-align:right;font-size:1.05em}
+        .summary-total.green{background:#e8f5e9;color:#2e7d32}
+        .summary-total.orange{background:#fff3e0;color:#e65100}
+        .print-button{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);margin-top:10px}
+        .toggle-prices-btn{grid-column:1/-1;padding:16px;background:linear-gradient(135deg,#ff9800,#f57c00);color:#fff;border:none;border-radius:15px;font-size:1.2em;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 5px 15px rgba(255,152,0,.4);touch-action:manipulation;transition:all .3s}
+        .toggle-prices-btn:active{transform:scale(.97)}
+        .toggle-prices-btn .icon{font-size:1.3em;transition:transform .3s}
+        .toggle-prices-btn.open .icon{transform:rotate(180deg)}
+        .settings-buttons{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
+        .settings-buttons .button{flex:1;min-width:100px;margin-top:0;font-size:.9em;padding:12px}
+        .btn-save{background:linear-gradient(135deg,#11998e,#38ef7d)!important}
+        .btn-reset{background:linear-gradient(135deg,#f093fb,#f5576c)!important}
+        .btn-calc{background:linear-gradient(135deg,#667eea,#764ba2)!important}
+        .save-notification{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;padding:12px 30px;border-radius:12px;z-index:9999;font-weight:700;box-shadow:0 8px 25px rgba(0,0,0,.3);transition:top .5s ease;font-size:1.1em}
+        .save-notification.show{top:20px}
+        .lock-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:10000;justify-content:center;align-items:center}
+        .lock-overlay.show{display:flex}
+        .lock-box{background:#fff;padding:30px;border-radius:20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);max-width:350px;width:90%}
+        .lock-box h3{color:#1e3c72;margin-bottom:15px;font-size:1.3em}
+        .lock-box input{width:100%;padding:15px;border:2px solid #ddd;border-radius:10px;font-size:18px;text-align:center;margin-bottom:12px;letter-spacing:5px}
+        .lock-box input:focus{border-color:#667eea;outline:0}
+        .lock-box .btn-unlock{width:100%;padding:15px;background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;border:none;border-radius:10px;font-size:1.1em;font-weight:700;cursor:pointer;margin-bottom:8px}
+        .lock-box .btn-cancel{width:100%;padding:12px;background:#eee;color:#666;border:none;border-radius:10px;font-size:1em;cursor:pointer}
+        .lock-box .error-msg{color:#f44336;font-weight:700;margin-top:8px;display:none}
+        .invoice{background:#fff;padding:30px;border:2px solid #1e3c72;margin:20px 10px;display:none;border-radius:15px}
+        .invoice.show{display:block}
+        .invoice-header{text-align:center;border-bottom:3px solid #1e3c72;padding-bottom:15px;margin-bottom:20px}
+        .invoice-header h1{color:#1e3c72;font-size:1.8em}
+        .invoice-section{margin:15px 0}
+        .invoice-section h3{background:#1e3c72;color:#fff;padding:8px 12px;margin-bottom:8px;border-radius:5px}
+        .invoice-table{width:100%;border-collapse:collapse}
+        .invoice-table td{padding:8px;border:1px solid #ddd;font-size:.9em}
+        .invoice-table td:first-child{background:#f8f9fa;font-weight:700;width:40%}
+        .install-banner{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:15px 20px;display:none;align-items:center;justify-content:space-between;z-index:9998;padding-bottom:calc(15px + env(safe-area-inset-bottom));box-shadow:0 -5px 20px rgba(0,0,0,.3);border-radius:15px 15px 0 0}
+        .install-banner.show{display:flex}
+        .install-banner button{padding:10px 20px;border:none;border-radius:25px;font-weight:700;font-size:.95em;cursor:pointer}
+        .install-banner .btn-install{background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff}
+        .install-banner .btn-dismiss{background:rgba(255,255,255,.2);color:#fff;margin-right:8px}
+        @media print{body{background:#fff;padding:0}.button,.settings-section,.toggle-prices-btn,.install-banner,.save-notification{display:none!important}.container{box-shadow:none;border-radius:0}.header{position:relative}}
+        @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-10px)}80%{transform:translateX(10px)}}
+        @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}60%{transform:translateY(-4px)}}
+        .splash-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1e3c72,#2a5298);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease}
+        .splash-screen.hide{opacity:0;pointer-events:none}
+        .splash-screen h1{color:#fff;font-size:3em;margin-bottom:10px;animation:bounce 2s infinite}
+        .splash-screen p{color:rgba(255,255,255,.8);font-size:1.2em}
+        .splash-screen .loader{width:50px;height:50px;border:4px solid rgba(255,255,255,.3);border-top:4px solid #fff;border-radius:50%;animation:spin 1s linear infinite;margin-top:30px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+    </style>
+</head>
+<body>
+
+    <!-- شاشة البداية -->
+    <div class="splash-screen" id="splashScreen">
+        <h1>🏭</h1>
+        <h1 style="font-size:2em;animation:none">WINDOORA</h1>
+        <p>نظام حساب الشبابيك والأبواب</p>
+        <div class="loader"></div>
+    </div>
+
+    <!-- إشعار الحفظ -->
+    <div class="save-notification" id="saveNotification">✅ تم حفظ الأسعار</div>
+
+    <!-- بانر التثبيت -->
+    <div class="install-banner" id="installBanner">
+        <span style="font-size:.95em">📲 ثبّت Windoora على جهازك</span>
+        <div style="display:flex;gap:5px">
+            <button class="btn-dismiss" onclick="dismissInstall()">لاحقاً</button>
+            <button class="btn-install" onclick="installApp()">تثبيت</button>
+        </div>
+    </div>
+
+    <!-- نافذة كلمة السر -->
+    <div class="lock-overlay" id="lockOverlay">
+        <div class="lock-box">
+            <h3>🔐 أدخل كلمة السر</h3>
+            <p style="color:#666;margin-bottom:15px">لعرض وتعديل الأسعار</p>
+            <input type="password" id="passwordInput" placeholder="****" maxlength="10" onkeypress="if(event.key==='Enter')checkPassword()">
+            <button class="btn-unlock" onclick="checkPassword()">🔓 فتح</button>
+            <button class="btn-cancel" onclick="closeLock()">❌ إلغاء</button>
+            <p class="error-msg" id="errorMsg">⚠️ كلمة السر غير صحيحة!</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏭 WINDOORA</h1>
+            <p>نظام حساب الشبابيك والأبواب المتقدم</p>
+            <span class="version-badge">v2.0 Mobile</span>
+        </div>
+
+        <div class="content">
+
+            <!-- زر إظهار/إخفاء الأسعار -->
+            <button class="toggle-prices-btn" id="toggleBtn" onclick="togglePrices()">
+                <span class="icon" id="toggleIcon">🔒</span>
+                <span id="toggleText">عرض إعدادات الأسعار</span>
+            </button>
+
+            <!-- قسم الإعدادات -->
+            <div class="section settings-section" id="settingsSection">
+                <h2>⚙️ إعدادات الأسعار</h2>
+                <div class="settings-grid">
+                    <div class="input-group"><label>حلق 701 (ريال/متر)</label><input type="number" id="price701" value="25" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>حلق 705 (ريال/متر)</label><input type="number" id="price705" value="23" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>حلق 708 (ريال/متر)</label><input type="number" id="price708" value="24" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>ضلفة شباك (ريال/متر)</label><input type="number" id="priceDoor" value="22" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>ضلفة باب (ريال/متر)</label><input type="number" id="priceDoorWindow" value="25" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>سؤاس (ريال/متر)</label><input type="number" id="priceSawas" value="20" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>تي (ريال/متر)</label><input type="number" id="priceTee" value="21" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>زجاج (ريال/م²)</label><input type="number" id="priceGlass" value="50" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>باكيتا (ريال/متر)</label><input type="number" id="priceBakita" value="18" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>سعر الصرف (ريال→جنيه)</label><input type="number" id="exchangeRate" value="14.5" step="0.1" class="price-input"></div>
+                    <div class="input-group"><label>نسبة الربح %</label><input type="number" id="profitMargin" value="20" step="1" class="price-input"></div>
+                </div>
+
+                <div class="acc-grid">
+                    <h4>🔧 أسعار الإكسسوارات (حبة)</h4>
+                    <div class="input-group"><label>مفصلة موحدة</label><input type="number" id="priceHinge" value="15" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سكاك (مصادمة)</label><input type="number" id="priceStriker" value="8" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>مقبض شباك</label><input type="number" id="priceWinHandle" value="35" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>مقبض باب</label><input type="number" id="priceDoorHandle" value="65" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>ذراع قلاب</label><input type="number" id="priceTiltStay" value="25" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>ترباس يدوي</label><input type="number" id="priceShootbolt" value="12" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>نهاية قائم (كاب)</label><input type="number" id="priceMullionCap" value="5" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سنترلوك 160</label><input type="number" id="priceLock160" value="85" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سنترلوك 180</label><input type="number" id="priceLock180" value="105" step="0.5" class="price-input"></div>
+                </div>
+
+                <div class="acc-grid">
+                    <h4>📏 أسعار السبالونات حسب المقاس</h4>
+                    <div class="input-group"><label>سبالونة 400</label><input type="number" id="priceESP400" value="45" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 600</label><input type="number" id="priceESP600" value="52" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 800</label><input type="number" id="priceESP800" value="58" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 1000</label><input type="number" id="priceESP1000" value="65" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 1200</label><input type="number" id="priceESP1200" value="72" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 1400</label><input type="number" id="priceESP1400" value="78" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 1600</label><input type="number" id="priceESP1600" value="85" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 1800</label><input type="number" id="priceESP1800" value="92" step="0.5" class="price-input"></div>
+                    <div class="input-group"><label>سبالونة 2000</label><input type="number" id="priceESP2000" value="100" step="0.5" class="price-input"></div>
+                </div>
+
+                <div class="settings-buttons">
+                    <button class="button btn-save" onclick="savePricesManual()">💾 حفظ</button>
+                    <button class="button btn-reset" onclick="resetPrices()">🔄 ضبط مصنع</button>
+                    <button class="button" style="background:linear-gradient(135deg,#78909c,#546e7a)!important" onclick="changePassword()">🔑 كلمة السر</button>
+                </div>
+            </div>
+
+            <!-- قسم المقاسات -->
+            <div class="section">
+                <h2>📐 بيانات الشباك</h2>
+                <div class="input-group"><label>العرض الكلي (سم)</label><input type="number" id="width" value="150" step="0.1"></div>
+                <div class="input-group"><label>الارتفاع الكلي (سم)</label><input type="number" id="height" value="150" step="0.1"></div>
+                <div class="input-group">
+                    <label>نوع الحلق</label>
+                    <select id="frameType">
+                        <option value="701">KOM 701</option>
+                        <option value="705">KOM 705</option>
+                        <option value="708" selected>KOM 708</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>نوع الفتحة</label>
+                    <select id="windowType">
+                        <option value="شباك" selected>شباك</option>
+                        <option value="باب">باب</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>نوع التشغيل</label>
+                    <select id="operationType">
+                        <option value="مفصلي" selected>مفصلي (Turn)</option>
+                        <option value="قلاب">قلاب (Tilt)</option>
+                        <option value="ثابت+مفصلي">ثابت + مفصلي</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>عدد الضلف</label>
+                    <select id="doorCount">
+                        <option value="1">1 ضلفة</option>
+                        <option value="2" selected>2 ضلفة</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- الثوابت -->
+            <div class="section">
+                <h2>📏 الثوابت</h2>
+                <div class="input-group"><label>ثابت يمين (سم)</label><input type="number" id="fixedRight" value="0" step="0.1"></div>
+                <div class="input-group"><label>ثابت شمال (سم)</label><input type="number" id="fixedLeft" value="0" step="0.1"></div>
+                <div class="input-group"><label>ثابت علوي (سم)</label><input type="number" id="fixedTop" value="0" step="0.1"></div>
+                <div class="input-group"><label>ثابت سفلي (سم)</label><input type="number" id="fixedBottom" value="0" step="0.1"></div>
+                <button class="button btn-calc" onclick="calculate()">🔢 احسب</button>
+            </div>
+
+            <!-- النتائج -->
+            <div class="section" style="grid-column:1/-1">
+                <h2>📊 النتائج</h2>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الفاتورة -->
+    <div class="invoice" id="invoice">
+        <div class="invoice-header">
+            <h1>🏭 WINDOORA</h1>
+            <p>فاتورة حساب الشباك</p>
+            <p>التاريخ: <span id="invoiceDate"></span></p>
+        </div>
+        <div id="invoiceContent"></div>
+        <button class="button print-button" onclick="shareInvoice()">📤 مشاركة الفاتورة</button>
+        <button class="button" style="background:linear-gradient(135deg,#667eea,#764ba2);margin-top:10px" onclick="window.print()">🖨️ طباعة</button>
+    </div>
+
+    <script>
+    // ===== شاشة البداية =====
+    setTimeout(()=>{
+        const s=document.getElementById('splashScreen');
+        s.classList.add('hide');
+        setTimeout(()=>s.style.display='none',500);
+    },1500);
+
+    // ===== كلمة السر =====
+    const DEFAULT_PASSWORD='1234';
+    function getPassword(){return localStorage.getItem('windooraPassword')||DEFAULT_PASSWORD}
+
+    let pricesVisible=false;
+
+    function togglePrices(){
+        if(!pricesVisible){
+            document.getElementById('lockOverlay').classList.add('show');
+            document.getElementById('passwordInput').value='';
+            setTimeout(()=>document.getElementById('passwordInput').focus(),100);
+            document.getElementById('errorMsg').style.display='none';
+        }else{hidePrices()}
+    }
+
+    function checkPassword(){
+        const input=document.getElementById('passwordInput').value;
+        if(input===getPassword()){closeLock();showPrices()}
+        else{
+            document.getElementById('errorMsg').style.display='block';
+            document.getElementById('passwordInput').value='';
+            document.getElementById('passwordInput').focus();
+            const box=document.querySelector('.lock-box');
+            box.style.animation='shake 0.5s';
+            setTimeout(()=>box.style.animation='',500);
+            if(navigator.vibrate)navigator.vibrate(200);
+        }
+    }
+
+    function showPrices(){
+        pricesVisible=true;
+        document.getElementById('settingsSection').classList.add('visible');
+        document.getElementById('toggleBtn').classList.add('open');
+        document.getElementById('toggleIcon').textContent='🔓';
+        document.getElementById('toggleText').textContent='إخفاء إعدادات الأسعار';
+        document.getElementById('toggleBtn').style.background='linear-gradient(135deg,#43a047,#66bb6a)';
+    }
+
+    function hidePrices(){
+        pricesVisible=false;
+        document.getElementById('settingsSection').classList.remove('visible');
+        document.getElementById('toggleBtn').classList.remove('open');
+        document.getElementById('toggleIcon').textContent='🔒';
+        document.getElementById('toggleText').textContent='عرض إعدادات الأسعار';
+        document.getElementById('toggleBtn').style.background='linear-gradient(135deg,#ff9800,#f57c00)';
+    }
+
+    function closeLock(){document.getElementById('lockOverlay').classList.remove('show')}
+
+    function changePassword(){
+        const c=prompt('أدخل كلمة السر الحالية:');
+        if(c!==getPassword()){alert('❌ كلمة السر غير صحيحة!');return}
+        const n=prompt('أدخل كلمة السر الجديدة:');
+        if(n&&n.trim()!==''){
+            const cf=prompt('أعد كتابة كلمة السر الجديدة:');
+            if(n===cf){localStorage.setItem('windooraPassword',n);alert('✅ تم تغيير كلمة السر!')}
+            else{alert('❌ غير متطابقة!')}
+        }
+    }
+
+    // ===== حفظ الأسعار =====
+    const priceInputIds=['price701','price705','price708','priceDoor','priceDoorWindow','priceSawas','priceTee','priceGlass','priceBakita','exchangeRate','profitMargin','priceHinge','priceStriker','priceWinHandle','priceDoorHandle','priceTiltStay','priceShootbolt','priceMullionCap','priceLock160','priceLock180','priceESP400','priceESP600','priceESP800','priceESP1000','priceESP1200','priceESP1400','priceESP1600','priceESP1800','priceESP2000'];
+
+    function savePrices(){
+        const p={};
+        priceInputIds.forEach(id=>{const el=document.getElementById(id);if(el)p[id]=el.value});
+        localStorage.setItem('windooraPrices',JSON.stringify(p));
+    }
+
+    function savePricesManual(){savePrices();showSaveNotification();if(navigator.vibrate)navigator.vibrate(100)}
+
+    function loadPrices(){
+        const saved=localStorage.getItem('windooraPrices');
+        if(saved){try{const p=JSON.parse(saved);priceInputIds.forEach(id=>{const el=document.getElementById(id);if(el&&p[id]!==undefined)el.value=p[id]})}catch(e){}}
+    }
+
+    function resetPrices(){if(confirm('إعادة ضبط جميع الأسعار للقيم الافتراضية؟')){localStorage.removeItem('windooraPrices');location.reload()}}
+
+    function showSaveNotification(){
+        const n=document.getElementById('saveNotification');
+        n.classList.add('show');
+        setTimeout(()=>n.classList.remove('show'),2500);
+    }
+
+    // ===== مشاركة =====
+    async function shareInvoice(){
+        const d=window.calculationData;
+        if(!d)return;
+        if(navigator.share){
+            try{
+                await navigator.share({
+                    title:'Windoora - فاتورة',
+                    text:`🏭 WINDOORA\n📐 ${d.width}×${d.height} سم\n🚪 ${d.windowType} - ${d.doorCount} ضلفة\n💰 ${d.sellingPrice.toFixed(2)} ريال\n💵 ${d.sellingPriceEGP.toFixed(2)} جنيه`
+                });
+            }catch(e){}
+        }else{window.print()}
+    }
+
+    // ===== PWA Install =====
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt',e=>{
+        e.preventDefault();deferredPrompt=e;
+        document.getElementById('installBanner').classList.add('show');
+    });
+    function installApp(){
+        if(deferredPrompt){
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(()=>{
+                document.getElementById('installBanner').classList.remove('show');
+                deferredPrompt=null;
+            });
+        }
+    }
+    function dismissInstall(){document.getElementById('installBanner').classList.remove('show')}
+    window.addEventListener('appinstalled',()=>{document.getElementById('installBanner').classList.remove('show')});
+
+    // ===== دالة الحساب =====
+    function calculate(){
+        const width=parseFloat(document.getElementById('width').value);
+        const height=parseFloat(document.getElementById('height').value);
+        const frameType=document.getElementById('frameType').value;
+        const windowType=document.getElementById('windowType').value;
+        const opType=document.getElementById('operationType').value;
+        const doorCount=parseInt(document.getElementById('doorCount').value);
+        const fixedRight=parseFloat(document.getElementById('fixedRight').value);
+        const fixedLeft=parseFloat(document.getElementById('fixedLeft').value);
+        const fixedTop=parseFloat(document.getElementById('fixedTop').value);
+        const fixedBottom=parseFloat(document.getElementById('fixedBottom').value);
+
+        const prices={'701':parseFloat(document.getElementById('price701').value),'705':parseFloat(document.getElementById('price705').value),'708':parseFloat(document.getElementById('price708').value),door:parseFloat(document.getElementById('priceDoor').value),doorWindow:parseFloat(document.getElementById('priceDoorWindow').value),sawas:parseFloat(document.getElementById('priceSawas').value),tee:parseFloat(document.getElementById('priceTee').value),glass:parseFloat(document.getElementById('priceGlass').value),bakita:parseFloat(document.getElementById('priceBakita').value)};
+
+        const exchangeRate=parseFloat(document.getElementById('exchangeRate').value);
+        const profitMargin=parseFloat(document.getElementById('profitMargin').value);
+        const frameDiscount=frameType==='701'?4.2:(frameType==='705'?3.1:3.7);
+        let frameAddition=frameType==='701'?0.6:(frameType==='705'?8.2:11.2);
+
+        const lightOpeningWidth=width-(frameDiscount*2)-fixedRight-fixedLeft;
+        const lightOpeningHeight=height-(frameDiscount*2)-fixedTop-fixedBottom;
+        const frameWidth=width+frameAddition;
+        const frameHeight=height+frameAddition;
+
+        let doorWidth;
+        if(doorCount===1||windowType==='باب'){doorWidth=lightOpeningWidth+1.6+0.6}
+        else{doorWidth=((lightOpeningWidth+1.6-0.6)/2)+0.6}
+        const doorHeight=lightOpeningHeight+1.6+0.6;
+
+        const glassDiscount=windowType==='شباك'?14:18.6;
+        const glassWidth=doorWidth-glassDiscount;
+        const glassHeight=doorHeight-glassDiscount;
+
+        const glassFixedRight=fixedRight>0?{width:fixedRight-1,height:height-(frameDiscount*2)-1}:null;
+        const glassFixedLeft=fixedLeft>0?{width:fixedLeft-1,height:height-(frameDiscount*2)-1}:null;
+        const glassFixedTop=fixedTop>0?{width:width-(frameDiscount*2)-1,height:fixedTop-1}:null;
+        const glassFixedBottom=fixedBottom>0?{width:width-(frameDiscount*2)-1,height:fixedBottom-1}:null;
+
+        const bakitaWidth=glassWidth+1;const bakitaHeight=glassHeight+1;
+        const bakitaFixedRight=glassFixedRight?{width:glassFixedRight.width+1,height:glassFixedRight.height+1}:null;
+        const bakitaFixedLeft=glassFixedLeft?{width:glassFixedLeft.width+1,height:glassFixedLeft.height+1}:null;
+        const bakitaFixedTop=glassFixedTop?{width:glassFixedTop.width+1,height:glassFixedTop.height+1}:null;
+        const bakitaFixedBottom=glassFixedBottom?{width:glassFixedBottom.width+1,height:glassFixedBottom.height+1}:null;
+
+        let sawasList=[],sawasCount=0,totalSawasLM=0;
+        if(fixedRight>0){let v=height-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت يمين',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
+        if(fixedLeft>0){let v=height-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت شمال',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
+        if(fixedTop>0){let v=width-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت علوي',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
+        if(fixedBottom>0){let v=width-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت سفلي',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
+
+        let tee=0,teeCount=0;
+        if(doorCount===2&&windowType!=='باب'){tee=doorHeight-8.2;teeCount=1}
+
+        const totalFrameLM=(frameWidth*2+frameHeight*2)/100;
+        const totalDoorLM=(doorWidth*doorCount*2+doorHeight*doorCount*2)/100;
+        const totalTeeLM=teeCount>0?(tee*teeCount)/100:0;
+
+        let totalGlassArea=(glassWidth*glassHeight/10000)*doorCount;
+        if(glassFixedRight)totalGlassArea+=(glassFixedRight.width*glassFixedRight.height/10000);
+        if(glassFixedLeft)totalGlassArea+=(glassFixedLeft.width*glassFixedLeft.height/10000);
+        if(glassFixedTop)totalGlassArea+=(glassFixedTop.width*glassFixedTop.height/10000);
+        if(glassFixedBottom)totalGlassArea+=(glassFixedBottom.width*glassFixedBottom.height/10000);
+
+        let totalBakitaLM=((bakitaWidth+bakitaHeight)*2/100)*doorCount;
+        [bakitaFixedRight,bakitaFixedLeft,bakitaFixedTop,bakitaFixedBottom].forEach(b=>{if(b)totalBakitaLM+=(b.width+b.height)*2/100});
+
+        let area=(width*height)/10000;if(area<1)area=1;
+
+        const framePrice=totalFrameLM*prices[frameType];
+        const doorUnitPrice=windowType==='باب'?prices.doorWindow:prices.door;
+        const doorPrice=totalDoorLM*doorUnitPrice;
+
+        let sawasPrice=0;
+        sawasList.forEach(s=>sawasPrice+=(s.value/100)*s.count*prices.sawas);
+
+        const teePrice=teeCount>0?totalTeeLM*prices.tee:0;
+        const glassPrice=totalGlassArea*prices.glass;
+        let bakitaPrice=totalBakitaLM*prices.bakita;
+
+        const acc=calculateAccessories(windowType,opType,doorCount,height);
+        let accTotal=0;
+        let accHTML='<div class="result-box"><h3>🔧 الإكسسوارات</h3>';
+        acc.forEach(item=>{const t=item.qty*item.price;accTotal+=t;accHTML+=`<div class="result-item"><span class="result-label">${item.name} (×${item.qty})</span><span class="result-value">${t.toFixed(2)} ريال</span></div>`});
+        accHTML+='</div>';
+
+        const totalCost=framePrice+doorPrice+sawasPrice+teePrice+glassPrice+bakitaPrice+accTotal;
+        const pricePerMeter=totalCost/area;
+        const sellingPrice=totalCost*(1+profitMargin/100);
+        const sellingPriceEGP=sellingPrice*exchangeRate;
+
+        let r=`
+            <div class="result-box"><h3>📐 الحلق (KOM ${frameType})</h3>
+            <div class="result-item"><span class="result-label">عرض:</span><span class="result-value">${frameWidth.toFixed(1)} سم × 2</span></div>
+            <div class="result-item"><span class="result-label">ارتفاع:</span><span class="result-value">${frameHeight.toFixed(1)} سم × 2</span></div>
+            <div class="summary-total">📏 إجمالي: ${totalFrameLM.toFixed(2)} م.ط</div></div>
+
+            <div class="result-box"><h3>🚪 الضلفة (${windowType})</h3>
+            <div class="result-item"><span class="result-label">عرض:</span><span class="result-value">${doorWidth.toFixed(1)} سم × ${doorCount*2}</span></div>
+            <div class="result-item"><span class="result-label">ارتفاع:</span><span class="result-value">${doorHeight.toFixed(1)} سم × ${doorCount*2}</span></div>
+            <div class="summary-total">📏 إجمالي: ${totalDoorLM.toFixed(2)} م.ط</div></div>
+
+            ${teeCount>0?`<div class="result-box"><h3>➕ التي</h3><div class="result-item"><span class="result-label">التي:</span><span class="result-value">${tee.toFixed(1)} سم × ${teeCount}</span></div><div class="summary-total">📏 إجمالي: ${totalTeeLM.toFixed(2)} م.ط</div></div>`:''}
+
+            ${sawasList.length>0?`<div class="result-box"><h3>📏 السؤاسات</h3>${sawasList.map(s=>`<div class="result-item"><span class="result-label">${s.name}:</span><span class="result-value">${s.value.toFixed(1)} سم</span></div>`).join('')}<div class="summary-total green">📏 إجمالي: ${totalSawasLM.toFixed(2)} م.ط</div></div>`:''}
+
+            <div class="result-box"><h3>🪟 الزجاج</h3>
+            <div class="result-item"><span class="result-label">ضلفة:</span><span class="result-value">${glassWidth.toFixed(1)}×${glassHeight.toFixed(1)} (×${doorCount})</span></div>
+            ${glassFixedRight?`<div class="result-item"><span class="result-label">ثابت يمين:</span><span class="result-value">${glassFixedRight.width.toFixed(1)}×${glassFixedRight.height.toFixed(1)}</span></div>`:''}
+            ${glassFixedLeft?`<div class="result-item"><span class="result-label">ثابت شمال:</span><span class="result-value">${glassFixedLeft.width.toFixed(1)}×${glassFixedLeft.height.toFixed(1)}</span></div>`:''}
+            ${glassFixedTop?`<div class="result-item"><span class="result-label">ثابت علوي:</span><span class="result-value">${glassFixedTop.width.toFixed(1)}×${glassFixedTop.height.toFixed(1)}</span></div>`:''}
+            ${glassFixedBottom?`<div class="result-item"><span class="result-label">ثابت سفلي:</span><span class="result-value">${glassFixedBottom.width.toFixed(1)}×${glassFixedBottom.height.toFixed(1)}</span></div>`:''}
+            <div class="summary-total orange">📐 إجمالي: ${totalGlassArea.toFixed(4)} م²</div></div>
+
+            <div class="result-box"><h3>📦 الباكيتا</h3>
+            <div class="result-item"><span class="result-label">ضلفة:</span><span class="result-value">${bakitaWidth.toFixed(1)}×${bakitaHeight.toFixed(1)} (×${doorCount})</span></div>
+            <div class="summary-total green">📏 إجمالي: ${totalBakitaLM.toFixed(2)} م.ط</div></div>
+
+            ${accHTML}
+
+            <div class="result-box" style="border-right-color:#ff9800"><h3>💰 التكلفة التفصيلية</h3>
+            <div class="result-item"><span class="result-label">الحلق:</span><span class="result-value">${framePrice.toFixed(2)} ريال</span></div>
+            <div class="result-item"><span class="result-label">الضلف:</span><span class="result-value">${doorPrice.toFixed(2)} ريال</span></div>
+            ${sawasList.length>0?`<div class="result-item"><span class="result-label">السؤاس:</span><span class="result-value">${sawasPrice.toFixed(2)} ريال</span></div>`:''}
+            ${teeCount>0?`<div class="result-item"><span class="result-label">التي:</span><span class="result-value">${teePrice.toFixed(2)} ريال</span></div>`:''}
+            <div class="result-item"><span class="result-label">الزجاج:</span><span class="result-value">${glassPrice.toFixed(2)} ريال</span></div>
+            <div class="result-item"><span class="result-label">الباكيتا:</span><span class="result-value">${bakitaPrice.toFixed(2)} ريال</span></div>
+            <div class="result-item"><span class="result-label">الإكسسوارات:</span><span class="result-value">${accTotal.toFixed(2)} ريال</span></div>
+            <div class="summary-total">إجمالي التكلفة: ${totalCost.toFixed(2)} ريال | م²: ${pricePerMeter.toFixed(2)} ريال</div></div>
+
+            <div class="total-box">
+            <h3>💵 السعر النهائي (+ ${profitMargin}%)</h3>
+            <div class="price">${sellingPrice.toFixed(2)} ريال</div>
+            <div style="font-size:1.4em;margin-top:10px">${sellingPriceEGP.toFixed(2)} جنيه</div></div>
+            <button class="button print-button" onclick="generateInvoice()">📄 إنشاء فاتورة</button>`;
+
+        document.getElementById('results').innerHTML=r;
+
+        window.calculationData={width,height,frameType,windowType,opType,doorCount,fixedRight,fixedLeft,fixedTop,fixedBottom,frameWidth,frameHeight,doorWidth,doorHeight,glassWidth,glassHeight,bakitaWidth,bakitaHeight,glassFixedRight,glassFixedLeft,glassFixedTop,glassFixedBottom,bakitaFixedRight,bakitaFixedLeft,bakitaFixedTop,bakitaFixedBottom,sawasList,tee,teeCount,area,frameAddition,framePrice,doorPrice,sawasPrice,teePrice,glassPrice,bakitaPrice,accTotal,acc,totalCost,pricePerMeter,sellingPrice,sellingPriceEGP,profitMargin,exchangeRate,sawasCount,doorUnitPrice,totalFrameLM,totalDoorLM,totalTeeLM,totalSawasLM,totalBakitaLM,totalGlassArea,prices};
+
+        if(navigator.vibrate)navigator.vibrate(50);
+    }
+
+    function calculateAccessories(type,opType,sashes,heightCm){
+        const gp=id=>parseFloat(document.getElementById(id).value)||0;
+        let acc=[];
+        let cams=0;
+        if(type==='باب'){
+            if(heightCm<=180){acc.push({name:'سنترلوك 160',qty:1,price:gp('priceLock160')});cams=3}
+            else{acc.push({name:'سنترلوك 180',qty:1,price:gp('priceLock180')});cams=4}
+        }else{
+            let es='';
+            if(heightCm<=60){es='400';cams=2}else if(heightCm<=80){es='600';cams=2}
+            else if(heightCm<=100){es='800';cams=2}else if(heightCm<=120){es='1000';cams=2}
+            else if(heightCm<=140){es='1200';cams=3}else if(heightCm<=160){es='1400';cams=3}
+            else if(heightCm<=180){es='1600';cams=3}else if(heightCm<=200){es='1800';cams=4}
+            else{es='2000';cams=4}
+            acc.push({name:'سبالونة '+es,qty:1,price:gp('priceESP'+es)});
+        }
+        let hq=0;
+        if(type==='باب')hq=4;else if(opType==='قلاب')hq=2;
+        else{hq=heightCm<=120?2:(heightCm<=200?3:4);hq*=sashes}
+        acc.push({name:'مفصلة موحدة',qty:hq,price:gp('priceHinge')});
+        let sq=cams;if(type!=='باب'&&sq<2)sq=2;
+        acc.push({name:'سكاك',qty:sq,price:gp('priceStriker')});
+        acc.push({name:type==='باب'?'مقبض باب':'مقبض شباك',qty:1,price:type==='باب'?gp('priceDoorHandle'):gp('priceWinHandle')});
+        if(opType==='قلاب')acc.push({name:'ذراع قلاب',qty:1,price:gp('priceTiltStay')});
+        if(sashes===2&&type!=='باب')acc.push({name:'ترباس يدوي',qty:2,price:gp('priceShootbolt')});
+        if(sashes===2||opType==='ثابت+مفصلي')acc.push({name:'كاب',qty:2,price:gp('priceMullionCap')});
+        return acc;
+    }
+
+    function generateInvoice(){
+        const d=window.calculationData;
+        if(!d){alert('احسب الشباك الأول!');return}
+        document.getElementById('invoiceDate').textContent=new Date().toLocaleDateString('ar-EG');
+        let h=`
+            <div class="invoice-section"><h3>📐 بيانات الفتحة</h3>
+            <table class="invoice-table">
+            <tr><td>المقاس</td><td>${d.width}×${d.height} سم</td></tr>
+            <tr><td>الحلق</td><td>KOM ${d.frameType}</td></tr>
+            <tr><td>النوع / التشغيل</td><td>${d.windowType} / ${d.opType}</td></tr>
+            <tr><td>الضلف</td><td>${d.doorCount}</td></tr>
+            <tr><td>المساحة</td><td>${d.area.toFixed(2)} م²</td></tr>
+            </table></div>
+            <div class="invoice-section"><h3>✂️ أمر القص</h3>
+            <table class="invoice-table">
+            <tr style="background:#e3f2fd"><td colspan="2"><strong>📐 الحلق</strong></td></tr>
+            <tr><td>عرض</td><td>${d.frameWidth.toFixed(1)} سم × 2</td></tr>
+            <tr><td>ارتفاع</td><td>${d.frameHeight.toFixed(1)} سم × 2</td></tr>
+            <tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalFrameLM.toFixed(2)} م.ط</strong></td></tr>
+            <tr style="background:#e3f2fd"><td colspan="2"><strong>🚪 الضلفة</strong></td></tr>
+            <tr><td>عرض</td><td>${d.doorWidth.toFixed(1)} سم × ${d.doorCount*2}</td></tr>
+            <tr><td>ارتفاع</td><td>${d.doorHeight.toFixed(1)} سم × ${d.doorCount*2}</td></tr>
+            <tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalDoorLM.toFixed(2)} م.ط</strong></td></tr>
+            ${d.teeCount>0?`<tr style="background:#e3f2fd"><td colspan="2"><strong>➕ التي</strong></td></tr><tr><td>التي</td><td>${d.tee.toFixed(1)} سم × ${d.teeCount}</td></tr><tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalTeeLM.toFixed(2)} م.ط</strong></td></tr>`:''}
+            ${d.sawasList.length>0?`<tr style="background:#e3f2fd"><td colspan="2"><strong>📏 السؤاس</strong></td></tr>${d.sawasList.map(s=>`<tr><td>${s.name}</td><td>${s.value.toFixed(1)} سم</td></tr>`).join('')}<tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalSawasLM.toFixed(2)} م.ط</strong></td></tr>`:''}
+            </table></div>
+            <div class="invoice-section"><h3>🪟 الزجاج والباكيتا</h3>
+            <table class="invoice-table">
+            <tr><td>زجاج الضلف</td><td>${d.glassWidth.toFixed(1)}×${d.glassHeight.toFixed(1)} (×${d.doorCount})</td></tr>
+            <tr style="background:#fff3e0"><td><strong>إجمالي الزجاج</strong></td><td><strong>${d.totalGlassArea.toFixed(4)} م²</strong></td></tr>
+            <tr><td>باكيتا</td><td>${d.bakitaWidth.toFixed(1)}×${d.bakitaHeight.toFixed(1)} (×${d.doorCount})</td></tr>
+            <tr style="background:#c8e6c9"><td><strong>إجمالي الباكيتا</strong></td><td><strong>${d.totalBakitaLM.toFixed(2)} م.ط</strong></td></tr>
+            </table></div>
+            <div class="invoice-section"><h3>🔧 الإكسسوارات</h3>
+            <table class="invoice-table">
+            ${d.acc.map(a=>`<tr><td>${a.name} (×${a.qty})</td><td>${(a.qty*a.price).toFixed(2)} ريال</td></tr>`).join('')}
+            </table></div>
+            <div class="invoice-section"><h3>💰 التكلفة النهائية</h3>
+            <table class="invoice-table">
+            <tr><td>إجمالي التكلفة</td><td>${d.totalCost.toFixed(2)} ريال</td></tr>
+            <tr><td>نسبة الربح</td><td>${d.profitMargin}%</td></tr>
+            <tr style="background:#c8e6c9"><td><strong>السعر النهائي (ريال)</strong></td><td><strong>${d.sellingPrice.toFixed(2)} ريال</strong></td></tr>
+            <tr style="background:#bbdefb"><td><strong>السعر النهائي (جنيه)</strong></td><td><strong>${d.sellingPriceEGP.toFixed(2)} جنيه</strong></td></tr>
+            </table></div>`;
+        document.getElementById('invoiceContent').innerHTML=h;
+        document.getElementById('invoice').classList.add('show');
+        document.getElementById('invoice').scrollIntoView({behavior:'smooth'});
+    }
+
+    // ===== تشغيل =====
+    window.onload=function(){
+        loadPrices();
+        priceInputIds.forEach(id=>{
+            const el=document.getElementById(id);
+            if(el)el.addEventListener('change',function(){savePrices();showSaveNotification()});
+        });
+        calculate();
+        if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+    };
+    </script>
+</body>
+</html>
