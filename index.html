@@ -2,626 +2,2098 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🏭 Windoora - نظام حساب الشبابيك والأبواب</title>
-
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1e3c72">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f42c1c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Windoora">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="نظام حساب الشبابيك والأبواب المتقدم">
-
-    <!-- Manifest & Icons -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="icon" type="image/png" href="icons/icon-192.png">
-
+    <title>🏭 Windoora - نظام حساب الشبابيك والأبواب (ريال)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-        html{overflow-x:hidden;-webkit-text-size-adjust:100%}
-        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;min-height:-webkit-fill-available;padding:10px;padding-top:env(safe-area-inset-top,10px);padding-bottom:env(safe-area-inset-bottom,10px);-webkit-overflow-scrolling:touch}
-        .container{max-width:1200px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
-        .header{background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:#fff;padding:20px;text-align:center;position:sticky;top:0;z-index:100}
-        .header h1{font-size:2em;margin-bottom:5px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
-        .header p{font-size:1em;opacity:.9}
-        .version-badge{display:inline-block;background:rgba(255,255,255,.2);padding:3px 12px;border-radius:20px;font-size:.7em;margin-top:5px}
-        .content{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px}
-        @media(max-width:768px){.content{grid-template-columns:1fr;gap:15px;padding:15px}}
-        .section{background:#f8f9fa;padding:20px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,.1)}
-        .section h2{color:#1e3c72;margin-bottom:15px;padding-bottom:10px;border-bottom:3px solid #667eea;font-size:1.3em}
-        .input-group{margin-bottom:12px}
-        .input-group label{display:block;margin-bottom:5px;color:#333;font-weight:700;font-size:.95em}
-        .input-group input,.input-group select{width:100%;padding:12px;border:2px solid #ddd;border-radius:10px;font-size:16px;transition:all .3s;-webkit-appearance:none;appearance:none;background:#fff}
-        .input-group input:focus,.input-group select:focus{border-color:#667eea;outline:0;box-shadow:0 0 10px rgba(102,126,234,.3)}
-        .input-group select{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat left 15px center;padding-left:35px}
-        .button{width:100%;padding:15px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:12px;font-size:1.1em;font-weight:700;cursor:pointer;margin-top:15px;transition:all .3s;touch-action:manipulation}
-        .button:active{transform:scale(.97);opacity:.9}
-        .result-box{background:#fff;padding:15px;border-radius:10px;margin-bottom:10px;border-right:4px solid #667eea}
-        .result-box h3{color:#1e3c72;margin-bottom:10px;font-size:1.1em}
-        .result-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;flex-wrap:wrap}
-        .result-item:last-child{border-bottom:none}
-        .result-label{color:#666;font-weight:500}
-        .result-value{color:#1e3c72;font-weight:700}
-        .total-box{background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%);color:#fff;padding:20px;border-radius:15px;margin-top:20px;text-align:center}
-        .total-box h3{font-size:1.3em;margin-bottom:10px}
-        .total-box .price{font-size:2.2em;font-weight:700;text-shadow:2px 2px 4px rgba(0,0,0,.2)}
-        .settings-section{grid-column:1/-1;background:#fff3cd;max-height:0;overflow:hidden;opacity:0;padding:0 20px;margin:0;border:none;transition:max-height .6s ease,opacity .4s ease,padding .4s ease,border .3s ease}
-        .settings-section.visible{max-height:5000px;opacity:1;padding:20px;border:2px solid #ffc107;transition:max-height .8s ease,opacity .4s ease,padding .4s ease,border .3s ease}
-        .settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
-        .acc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;background:#e8f5e9;padding:15px;border-radius:10px;margin-top:15px;border:1px solid #c8e6c9}
-        .acc-grid h4{grid-column:1/-1;color:#2e7d32;margin-bottom:5px}
-        .summary-total{background:#e3f2fd;padding:10px;border-radius:5px;margin-top:10px;font-weight:700;color:#1e3c72;text-align:right;font-size:1.05em}
-        .summary-total.green{background:#e8f5e9;color:#2e7d32}
-        .summary-total.orange{background:#fff3e0;color:#e65100}
-        .print-button{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);margin-top:10px}
-        .toggle-prices-btn{grid-column:1/-1;padding:16px;background:linear-gradient(135deg,#ff9800,#f57c00);color:#fff;border:none;border-radius:15px;font-size:1.2em;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 5px 15px rgba(255,152,0,.4);touch-action:manipulation;transition:all .3s}
-        .toggle-prices-btn:active{transform:scale(.97)}
-        .toggle-prices-btn .icon{font-size:1.3em;transition:transform .3s}
-        .toggle-prices-btn.open .icon{transform:rotate(180deg)}
-        .settings-buttons{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
-        .settings-buttons .button{flex:1;min-width:100px;margin-top:0;font-size:.9em;padding:12px}
-        .btn-save{background:linear-gradient(135deg,#11998e,#38ef7d)!important}
-        .btn-reset{background:linear-gradient(135deg,#f093fb,#f5576c)!important}
-        .btn-calc{background:linear-gradient(135deg,#667eea,#764ba2)!important}
-        .save-notification{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;padding:12px 30px;border-radius:12px;z-index:9999;font-weight:700;box-shadow:0 8px 25px rgba(0,0,0,.3);transition:top .5s ease;font-size:1.1em}
-        .save-notification.show{top:20px}
-        .lock-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:10000;justify-content:center;align-items:center}
-        .lock-overlay.show{display:flex}
-        .lock-box{background:#fff;padding:30px;border-radius:20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);max-width:350px;width:90%}
-        .lock-box h3{color:#1e3c72;margin-bottom:15px;font-size:1.3em}
-        .lock-box input{width:100%;padding:15px;border:2px solid #ddd;border-radius:10px;font-size:18px;text-align:center;margin-bottom:12px;letter-spacing:5px}
-        .lock-box input:focus{border-color:#667eea;outline:0}
-        .lock-box .btn-unlock{width:100%;padding:15px;background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;border:none;border-radius:10px;font-size:1.1em;font-weight:700;cursor:pointer;margin-bottom:8px}
-        .lock-box .btn-cancel{width:100%;padding:12px;background:#eee;color:#666;border:none;border-radius:10px;font-size:1em;cursor:pointer}
-        .lock-box .error-msg{color:#f44336;font-weight:700;margin-top:8px;display:none}
-        .invoice{background:#fff;padding:30px;border:2px solid #1e3c72;margin:20px 10px;display:none;border-radius:15px}
-        .invoice.show{display:block}
-        .invoice-header{text-align:center;border-bottom:3px solid #1e3c72;padding-bottom:15px;margin-bottom:20px}
-        .invoice-header h1{color:#1e3c72;font-size:1.8em}
-        .invoice-section{margin:15px 0}
-        .invoice-section h3{background:#1e3c72;color:#fff;padding:8px 12px;margin-bottom:8px;border-radius:5px}
-        .invoice-table{width:100%;border-collapse:collapse}
-        .invoice-table td{padding:8px;border:1px solid #ddd;font-size:.9em}
-        .invoice-table td:first-child{background:#f8f9fa;font-weight:700;width:40%}
-        .install-banner{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:15px 20px;display:none;align-items:center;justify-content:space-between;z-index:9998;padding-bottom:calc(15px + env(safe-area-inset-bottom));box-shadow:0 -5px 20px rgba(0,0,0,.3);border-radius:15px 15px 0 0}
-        .install-banner.show{display:flex}
-        .install-banner button{padding:10px 20px;border:none;border-radius:25px;font-weight:700;font-size:.95em;cursor:pointer}
-        .install-banner .btn-install{background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff}
-        .install-banner .btn-dismiss{background:rgba(255,255,255,.2);color:#fff;margin-right:8px}
-        @media print{body{background:#fff;padding:0}.button,.settings-section,.toggle-prices-btn,.install-banner,.save-notification{display:none!important}.container{box-shadow:none;border-radius:0}.header{position:relative}}
-        @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-10px)}80%{transform:translateX(10px)}}
-        @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}60%{transform:translateY(-4px)}}
-        .splash-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1e3c72,#2a5298);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease}
-        .splash-screen.hide{opacity:0;pointer-events:none}
-        .splash-screen h1{color:#fff;font-size:3em;margin-bottom:10px;animation:bounce 2s infinite}
-        .splash-screen p{color:rgba(255,255,255,.8);font-size:1.2em}
-        .splash-screen .loader{width:50px;height:50px;border:4px solid rgba(255,255,255,.3);border-top:4px solid #fff;border-radius:50%;animation:spin 1s linear infinite;margin-top:30px}
-        @keyframes spin{to{transform:rotate(360deg)}}
+        :root {
+            --primary: #00B894;
+            --primary-light: #00CEC9;
+            --primary-dark: #00A085;
+            --secondary: #6C5CE7;
+            --secondary-light: #A29BFE;
+            --secondary-dark: #5B4CD4;
+            --accent: #FD79A8;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #e17055;
+            --dark: #1a1a2e;
+            --dark-light: #16213e;
+            --card: #FFFFFF;
+            --card-dark: #2d2d44;
+            --text-dark: #1E293B;
+            --text-light: #f8f9fa;
+            --text-medium: #64748B;
+            --text-muted: #94A3B8;
+            --border: #e2e8f0;
+            --border-dark: #3d3d5c;
+            --sidebar-width: 280px;
+            --bg-main: #f0f4ff;
+            --bg-dark: #1a1a2e;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --font-ar: 'Cairo', sans-serif;
+            --font-en: 'Poppins', sans-serif;
+        }
+        
+        [data-theme="dark"] {
+            --card: #2d2d44;
+            --bg-main: #1a1a2e;
+            --text-dark: #f8f9fa;
+            --text-medium: #a0aec0;
+            --border: #3d3d5c;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        
+        [dir="rtl"] { font-family: var(--font-ar); }
+        [dir="ltr"] { font-family: var(--font-en); }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-ar);
+            background: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .floating-btns {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1002;
+        }
+        
+        .float-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            color: white;
+            border: none;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle { background: var(--primary); }
+        .lang-toggle { background: var(--secondary); font-size: 0.9em; }
+        .float-btn:hover { transform: scale(1.1); }
+        .float-btn:active { transform: scale(0.95); }
+        
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px 16px;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        [dir="ltr"] .sidebar { right: auto; left: 0; }
+        
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-logo { font-size: 2.5em; margin-bottom: 8px; }
+        
+        .sidebar-title {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .sidebar-subtitle {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8em;
+            margin-top: 4px;
+        }
+        
+        .currency-badge {
+            color: #fff;
+            font-size: 0.85em;
+            margin-top: 10px;
+            font-weight: 700;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+        }
+        
+        .sidebar-credit {
+            color: #fff;
+            font-size: 0.9em;
+            margin-top: 14px;
+            font-weight: 700;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(244, 44, 28, 0.3);
+        }
+        
+        .nav-section { margin-bottom: 16px; }
+        
+        .nav-section-title {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            padding-right: 12px;
+        }
+        
+        [dir="ltr"] .nav-section-title { padding-right: 0; padding-left: 12px; }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+        
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 15px rgba(244, 44, 28, 0.4);
+        }
+        
+        .nav-item .nav-icon { font-size: 1.2em; width: 26px; text-align: center; }
+        
+        .sidebar-settings-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-settings-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 48px;
+            height: 48px;
+            background: var(--dark);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1.4em;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: var(--shadow-lg);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        [dir="ltr"] .mobile-menu-btn { right: auto; left: 16px; }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        
+        .main-content {
+            margin-right: var(--sidebar-width);
+            padding: 20px;
+            min-height: 100vh;
+            transition: margin 0.3s ease;
+        }
+        
+        [dir="ltr"] .main-content { margin-right: 0; margin-left: var(--sidebar-width); }
+        
+        .system-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .system-btn {
+            padding: 16px 32px;
+            border: 3px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--card);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 150px;
+            font-family: inherit;
+        }
+        
+        .system-btn:hover { border-color: var(--primary); transform: translateY(-2px); }
+        
+        .system-btn.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+        
+        .system-btn .system-icon { font-size: 2em; margin-bottom: 6px; }
+        .system-btn .system-name { font-size: 1.1em; font-weight: 700; }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .bento-card {
+            background: var(--card);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .bento-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .bento-card.span-2 { grid-column: span 2; }
+        .bento-card.span-full { grid-column: 1 / -1; }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+        
+        .card-icon.purple { background: rgba(244, 44, 28, 0.15); color: var(--primary); }
+        .card-icon.green { background: #e0fff4; color: #00b894; }
+        .card-icon.blue { background: rgba(13, 110, 253, 0.15); color: var(--secondary); }
+        .card-icon.orange { background: #fff3e0; color: #e17055; }
+        .card-icon.pink { background: #fff0f6; color: #FD79A8; }
+        .card-icon.cyan { background: #e0f7fa; color: #00838f; }
+        
+        [data-theme="dark"] .card-icon { opacity: 0.9; }
+        
+        .card-title { font-size: 1.1em; font-weight: 700; }
+        
+        .price-badge-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+            color: white;
+            text-align: center;
+            padding: 28px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .price-badge-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(244, 44, 28, 0.2) 0%, transparent 60%);
+            animation: pricePulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pricePulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .price-badge-content { position: relative; z-index: 2; }
+        .price-badge-icon { font-size: 2.5em; margin-bottom: 12px; opacity: 0.9; }
+        .price-badge-label { font-size: 0.95em; opacity: 0.8; margin-bottom: 6px; }
+        
+        .price-badge-value {
+            font-size: 2.4em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+        
+        .price-badge-currency { font-size: 1.3em; opacity: 0.9; color: var(--secondary); }
+        
+        .price-badge-secondary {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .price-per-meter {
+            font-size: 1.1em;
+            color: var(--warning);
+            margin-bottom: 8px;
+            padding: 8px 16px;
+            background: rgba(253,203,110,0.15);
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .price-badge-info {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 10px;
+            font-size: 0.8em;
+            opacity: 0.7;
+            flex-wrap: wrap;
+        }
+        
+        .input-group { margin-bottom: 14px; }
+        
+        .input-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .input-group .field-icon { font-size: 1em; }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            font-weight: 500;
+            color: var(--text-dark);
+            background: var(--card);
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(244, 44, 28, 0.1);
+        }
+        
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-group:hover { border-color: var(--primary); }
+        
+        .checkbox-group.checked {
+            border-color: var(--primary);
+            background: rgba(244, 44, 28, 0.1);
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+        
+        .checkbox-group label { cursor: pointer; font-weight: 600; flex: 1; font-size: 0.9em; }
+        
+        .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        
+        .radio-item {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 14px;
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .radio-item:hover { border-color: var(--primary); }
+        
+        .radio-item.selected {
+            border-color: var(--primary);
+            background: rgba(244, 44, 28, 0.1);
+            color: var(--primary);
+        }
+        
+        .radio-item input { display: none; }
+        
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1em;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(244, 44, 28, 0.4);
+        }
+        
+        .btn-success { background: linear-gradient(135deg, #00b894, #00CEC9); color: white; }
+        .btn-warning { background: linear-gradient(135deg, #e17055, #FD79A8); color: white; }
+        .btn-dark { background: linear-gradient(135deg, #2D3436, #636e72); color: white; }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        
+        .result-box {
+            background: var(--card);
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            border-right: 4px solid var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        [dir="ltr"] .result-box { border-right: none; border-left: 4px solid var(--primary); }
+        
+        .result-box h3 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+        }
+        
+        .result-box.green { border-color: var(--success); }
+        .result-box.green h3 { color: var(--success); }
+        .result-box.orange { border-color: var(--warning); }
+        .result-box.orange h3 { color: #d68910; }
+        .result-box.blue { border-color: var(--secondary); }
+        .result-box.blue h3 { color: var(--secondary); }
+        .result-box.cyan { border-color: #00CEC9; }
+        .result-box.cyan h3 { color: #00838f; }
+        .result-box.pink { border-color: var(--accent); }
+        .result-box.pink h3 { color: #d63384; }
+        
+        [dir="ltr"] .result-box.green,
+        [dir="ltr"] .result-box.orange,
+        [dir="ltr"] .result-box.blue,
+        [dir="ltr"] .result-box.cyan,
+        [dir="ltr"] .result-box.pink { border-right: none; }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85em;
+        }
+        
+        .result-item:last-child { border-bottom: none; }
+        .result-label { color: var(--text-medium); }
+        .result-value { font-weight: 700; }
+        
+        .summary-total {
+            background: rgba(244, 44, 28, 0.1);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: var(--primary);
+        }
+        
+        .summary-total.green { background: rgba(0,184,148,0.1); color: var(--success); }
+        .summary-total.orange { background: rgba(253,203,110,0.2); color: #d68910; }
+        .summary-total.pink { background: rgba(253,121,168,0.15); color: #d63384; }
+        
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 16px;
+            overflow-y: auto;
+        }
+        
+        .settings-panel.show { display: flex; }
+        
+        .settings-container {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            max-width: 1100px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .settings-header {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .settings-header h2 { font-size: 1.3em; display: flex; align-items: center; gap: 10px; }
+        
+        .settings-close {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .settings-close:hover { background: rgba(255,255,255,0.2); }
+        
+        .settings-body { padding: 24px; }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .settings-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        
+        .settings-tab {
+            padding: 12px 24px;
+            border: none;
+            background: var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+        
+        .settings-tab:hover { background: #d0d0d0; }
+        .settings-tab.active { background: var(--primary); color: white; }
+        
+        .settings-tab-content { display: none; }
+        .settings-tab-content.active { display: block; }
+        
+        .price-section {
+            background: rgba(244, 44, 28, 0.05);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+        
+        .price-section h4 {
+            font-size: 0.95em;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .price-section.ps-kompen { background: rgba(0,184,148,0.08); }
+        .price-section.ps-kompen h4 { color: #276749; }
+        .price-section.ps-kompen-color { background: rgba(255,107,107,0.08); }
+        .price-section.ps-kompen-color h4 { color: #c53030; }
+        .price-section.ps-craft { background: rgba(13, 110, 253, 0.08); }
+        .price-section.ps-craft h4 { color: var(--secondary); }
+        .price-section.ps-craft-color { background: rgba(107,70,193,0.08); }
+        .price-section.ps-craft-color h4 { color: #6b46c1; }
+        .price-section.ps-accessories { background: rgba(253,203,110,0.15); }
+        .price-section.ps-accessories h4 { color: #975a16; }
+        .price-section.ps-espagnolette { background: rgba(162,155,254,0.15); }
+        .price-section.ps-espagnolette h4 { color: #6b46c1; }
+        .price-section.ps-sliding { background: rgba(0,206,201,0.1); }
+        .price-section.ps-sliding h4 { color: #00838f; }
+        
+        .settings-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 20px 24px;
+            background: var(--border);
+            border-top: 1px solid var(--border);
+        }
+        
+        .settings-buttons .btn { flex: 1; min-width: 130px; }
+        
+        .lock-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26,26,46,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .lock-overlay.show { display: flex; }
+        
+        .lock-box {
+            background: var(--card);
+            padding: 40px 32px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            max-width: 380px;
+            width: 100%;
+        }
+        
+        .lock-box .lock-icon { font-size: 3em; margin-bottom: 14px; }
+        .lock-box h3 { margin-bottom: 8px; font-size: 1.3em; }
+        .lock-box p { color: var(--text-medium); margin-bottom: 20px; font-size: 0.9em; }
+        
+        .lock-box input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 14px;
+            letter-spacing: 8px;
+            font-family: inherit;
+        }
+        
+        .lock-box input:focus { border-color: var(--primary); outline: none; }
+        .lock-box .btn { width: 100%; margin-bottom: 8px; }
+        .lock-box .error-msg { color: #e74c3c; font-weight: 700; margin-top: 10px; display: none; font-size: 0.9em; }
+        
+        .save-notification {
+            position: fixed;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #00b894, #00CEC9);
+            color: white;
+            padding: 16px 36px;
+            border-radius: var(--radius-md);
+            z-index: 9999;
+            font-size: 1em;
+            font-weight: 700;
+            box-shadow: var(--shadow-lg);
+            transition: top 0.4s ease;
+        }
+        
+        .save-notification.show { top: 24px; }
+        
+        @media (max-width: 1024px) {
+            .bento-card.span-2 { grid-column: span 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(100%); width: 85%; max-width: 300px; }
+            [dir="ltr"] .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay.show { display: block; }
+            .mobile-menu-btn { display: flex; }
+            
+            .main-content {
+                margin-right: 0 !important;
+                margin-left: 0 !important;
+                padding: 70px 12px 160px;
+            }
+            
+            .bento-grid { grid-template-columns: 1fr; gap: 12px; }
+            .bento-card.span-full, .bento-card.span-2 { grid-column: span 1; }
+            .input-row { grid-template-columns: 1fr; }
+            .price-badge-value { font-size: 2em; }
+            .system-selector { gap: 8px; }
+            .system-btn { padding: 14px 20px; min-width: 120px; flex: 1; }
+            .system-btn .system-icon { font-size: 1.6em; }
+            .system-btn .system-name { font-size: 0.95em; }
+            .results-grid { grid-template-columns: 1fr; }
+            
+            .floating-btns { bottom: 16px; left: 16px; }
+            .float-btn { width: 50px; height: 50px; font-size: 1.2em; }
+            .lang-toggle { font-size: 0.8em; }
+            
+            .settings-grid { grid-template-columns: 1fr; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--border); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        
+        .hinged-section, .sliding-section { display: none; }
+        .hinged-section.active, .sliding-section.active { display: block; }
+        
+        @media print {
+            .sidebar, .mobile-menu-btn, .floating-btns, .btn { display: none !important; }
+            .main-content { margin: 0 !important; padding: 10px; }
+            .bento-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+        }
     </style>
 </head>
-<body>
-
-    <!-- شاشة البداية -->
-    <div class="splash-screen" id="splashScreen">
-        <h1>🏭</h1>
-        <h1 style="font-size:2em;animation:none">WINDOORA</h1>
-        <p>نظام حساب الشبابيك والأبواب</p>
-        <div class="loader"></div>
+<body data-theme="light">
+    <div class="save-notification" id="saveNotification">✅ <span data-ar="تم الحفظ بنجاح" data-en="Saved successfully"></span></div>
+    
+    <div class="floating-btns">
+        <button class="float-btn lang-toggle" onclick="toggleLanguage()" title="Switch Language">EN</button>
+        <button class="float-btn theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
     </div>
-
-    <!-- إشعار الحفظ -->
-    <div class="save-notification" id="saveNotification">✅ تم حفظ الأسعار</div>
-
-    <!-- بانر التثبيت -->
-    <div class="install-banner" id="installBanner">
-        <span style="font-size:.95em">📲 ثبّت Windoora على جهازك</span>
-        <div style="display:flex;gap:5px">
-            <button class="btn-dismiss" onclick="dismissInstall()">لاحقاً</button>
-            <button class="btn-install" onclick="installApp()">تثبيت</button>
-        </div>
-    </div>
-
-    <!-- نافذة كلمة السر -->
+    
     <div class="lock-overlay" id="lockOverlay">
         <div class="lock-box">
-            <h3>🔐 أدخل كلمة السر</h3>
-            <p style="color:#666;margin-bottom:15px">لعرض وتعديل الأسعار</p>
-            <input type="password" id="passwordInput" placeholder="****" maxlength="10" onkeypress="if(event.key==='Enter')checkPassword()">
-            <button class="btn-unlock" onclick="checkPassword()">🔓 فتح</button>
-            <button class="btn-cancel" onclick="closeLock()">❌ إلغاء</button>
-            <p class="error-msg" id="errorMsg">⚠️ كلمة السر غير صحيحة!</p>
+            <div class="lock-icon">🔐</div>
+            <h3 data-ar="أدخل كلمة السر" data-en="Enter Password"></h3>
+            <p data-ar="لعرض وتعديل إعدادات الأسعار" data-en="To view and edit price settings"></p>
+            <input type="password" id="passwordInput" placeholder="••••" maxlength="10" onkeypress="if(event.key==='Enter')checkPassword()">
+            <button class="btn btn-success" onclick="checkPassword()">🔓 <span data-ar="فتح" data-en="Open"></span></button>
+            <button class="btn" style="background:var(--border);color:var(--text-medium);" onclick="closeLock()"><span data-ar="إلغاء" data-en="Cancel"></span></button>
+            <p class="error-msg" id="errorMsg">⚠️ <span data-ar="كلمة السر غير صحيحة" data-en="Incorrect password"></span></p>
         </div>
     </div>
-
-    <div class="container">
-        <div class="header">
-            <h1>🏭 WINDOORA</h1>
-            <p>نظام حساب الشبابيك والأبواب المتقدم</p>
-            <span class="version-badge">v2.0 Mobile</span>
+    
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">🏭</div>
+            <h1 class="sidebar-title">WINDOORA</h1>
+            <p class="sidebar-subtitle" data-ar="نظام حساب الشبابيك والأبواب" data-en="Windows & Doors Calculator"></p>
+            <div class="currency-badge">🇸🇦 ريال سعودي</div>
+            <p class="sidebar-credit">by Eng / Hassan Merza</p>
         </div>
-
-        <div class="content">
-
-            <!-- زر إظهار/إخفاء الأسعار -->
-            <button class="toggle-prices-btn" id="toggleBtn" onclick="togglePrices()">
-                <span class="icon" id="toggleIcon">🔒</span>
-                <span id="toggleText">عرض إعدادات الأسعار</span>
-            </button>
-
-            <!-- قسم الإعدادات -->
-            <div class="section settings-section" id="settingsSection">
-                <h2>⚙️ إعدادات الأسعار</h2>
-                <div class="settings-grid">
-                    <div class="input-group"><label>حلق 701 (ريال/متر)</label><input type="number" id="price701" value="25" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>حلق 705 (ريال/متر)</label><input type="number" id="price705" value="23" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>حلق 708 (ريال/متر)</label><input type="number" id="price708" value="24" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>ضلفة شباك (ريال/متر)</label><input type="number" id="priceDoor" value="22" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>ضلفة باب (ريال/متر)</label><input type="number" id="priceDoorWindow" value="25" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>سؤاس (ريال/متر)</label><input type="number" id="priceSawas" value="20" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>تي (ريال/متر)</label><input type="number" id="priceTee" value="21" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>زجاج (ريال/م²)</label><input type="number" id="priceGlass" value="50" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>باكيتا (ريال/متر)</label><input type="number" id="priceBakita" value="18" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>سعر الصرف (ريال→جنيه)</label><input type="number" id="exchangeRate" value="14.5" step="0.1" class="price-input"></div>
-                    <div class="input-group"><label>نسبة الربح %</label><input type="number" id="profitMargin" value="20" step="1" class="price-input"></div>
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-title" data-ar="النظام" data-en="SYSTEM"></div>
+                <a class="nav-item active" id="navHinged" onclick="switchSystem('hinged')">
+                    <span class="nav-icon">🚪</span>
+                    <span data-ar="مفصلي" data-en="Hinged"></span>
+                </a>
+                <a class="nav-item" id="navSliding" onclick="switchSystem('sliding')">
+                    <span class="nav-icon">🔄</span>
+                    <span data-ar="سحاب" data-en="Sliding"></span>
+                </a>
+            </div>
+        </nav>
+        <button class="sidebar-settings-btn" onclick="toggleSettings()">
+            <span>🔒</span>
+            <span data-ar="إعدادات الأسعار" data-en="Price Settings"></span>
+        </button>
+    </aside>
+    
+    <main class="main-content">
+        <div class="system-selector">
+            <div class="system-btn active" id="hingedBtn" onclick="switchSystem('hinged')">
+                <div class="system-icon">🚪</div>
+                <div class="system-name" data-ar="مفصلي" data-en="Hinged"></div>
+            </div>
+            <div class="system-btn" id="slidingBtn" onclick="switchSystem('sliding')">
+                <div class="system-icon">🔄</div>
+                <div class="system-name" data-ar="سحاب" data-en="Sliding"></div>
+            </div>
+        </div>
+        
+        <!-- Hinged Section -->
+        <div class="hinged-section active" id="hingedSection">
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <div class="card-header">
+                        <div class="card-icon purple">📐</div>
+                        <h2 class="card-title" data-ar="بيانات الشباك" data-en="Window Data"></h2>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span class="field-icon">↔️</span> <span data-ar="العرض (سم)" data-en="Width (cm)"></span></label>
+                            <input type="number" id="hingedWidth" value="150" step="0.1" oninput="calculateHinged();saveFormData();">
+                        </div>
+                        <div class="input-group">
+                            <label><span class="field-icon">↕️</span> <span data-ar="الارتفاع (سم)" data-en="Height (cm)"></span></label>
+                            <input type="number" id="hingedHeight" value="150" step="0.1" oninput="calculateHinged();saveFormData();">
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span class="field-icon">🎨</span> <span data-ar="اللون" data-en="Color"></span></label>
+                            <select id="hingedColor" onchange="calculateHinged();saveFormData();">
+                                <option value="white" data-ar="⬜ أبيض" data-en="⬜ White">⬜ أبيض</option>
+                                <option value="colored" data-ar="🎨 ألوان" data-en="🎨 Colored">🎨 ألوان</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label><span class="field-icon">🔢</span> <span data-ar="عدد الضلف" data-en="Sash Count"></span></label>
+                            <select id="hingedDoorCount" onchange="calculateHinged();saveFormData();">
+                                <option value="1" data-ar="1 ضلفة" data-en="1 Sash">1 ضلفة</option>
+                                <option value="2" selected data-ar="2 ضلفة" data-en="2 Sash">2 ضلفة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label><span class="field-icon">🏗️</span> <span data-ar="نوع الحلق" data-en="Frame Type"></span></label>
+                        <select id="hingedFrameType" onchange="calculateHinged();saveFormData();">
+                            <option value="701">بدون بار كومبن (701)</option>
+                            <option value="705">بار صغير كومبن (705)</option>
+                            <option value="708" selected>بار عريض كومبن (708)</option>
+                            <option value="710">بالبار كرافت (710)</option>
+                            <option value="711">بدون بار كرافت (711)</option>
+                        </select>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span class="field-icon">🪟</span> <span data-ar="النوع" data-en="Type"></span></label>
+                            <select id="hingedWindowType" onchange="calculateHinged();saveFormData();">
+                                <option value="شباك" data-ar="شباك" data-en="Window">شباك</option>
+                                <option value="باب" data-ar="باب" data-en="Door">باب</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label><span class="field-icon">⚙️</span> <span data-ar="التشغيل" data-en="Operation"></span></label>
+                            <select id="hingedOperationType" onchange="calculateHinged();saveFormData();">
+                                <option value="مفصلي" data-ar="مفصلي" data-en="Hinged">مفصلي</option>
+                                <option value="قلاب" data-ar="قلاب" data-en="Tilt">قلاب</option>
+                                <option value="ثابت+مفصلي" data-ar="ثابت+مفصلي" data-en="Fixed+Hinged">ثابت+مفصلي</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="acc-grid">
-                    <h4>🔧 أسعار الإكسسوارات (حبة)</h4>
-                    <div class="input-group"><label>مفصلة موحدة</label><input type="number" id="priceHinge" value="15" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سكاك (مصادمة)</label><input type="number" id="priceStriker" value="8" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>مقبض شباك</label><input type="number" id="priceWinHandle" value="35" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>مقبض باب</label><input type="number" id="priceDoorHandle" value="65" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>ذراع قلاب</label><input type="number" id="priceTiltStay" value="25" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>ترباس يدوي</label><input type="number" id="priceShootbolt" value="12" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>نهاية قائم (كاب)</label><input type="number" id="priceMullionCap" value="5" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سنترلوك 160</label><input type="number" id="priceLock160" value="85" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سنترلوك 180</label><input type="number" id="priceLock180" value="105" step="0.5" class="price-input"></div>
+                
+                <div class="bento-card price-badge-card">
+                    <div class="price-badge-content">
+                        <div class="price-badge-icon">💰</div>
+                        <div class="price-badge-label" data-ar="السعر النهائي" data-en="Final Price"></div>
+                        <div class="price-badge-value" id="hingedFinalPrice">0.00</div>
+                        <div class="price-badge-currency">ريال</div>
+                        <div class="price-badge-secondary">
+                            <div class="price-per-meter" id="hingedPricePerMeter">📐 سعر المتر: 0.00 ريال/م²</div>
+                            <div class="price-badge-info">
+                                <span id="hingedBadgeArea">0 م²</span>
+                                <span id="hingedBadgeSystem">—</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="acc-grid">
-                    <h4>📏 أسعار السبالونات حسب المقاس</h4>
-                    <div class="input-group"><label>سبالونة 400</label><input type="number" id="priceESP400" value="45" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 600</label><input type="number" id="priceESP600" value="52" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 800</label><input type="number" id="priceESP800" value="58" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 1000</label><input type="number" id="priceESP1000" value="65" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 1200</label><input type="number" id="priceESP1200" value="72" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 1400</label><input type="number" id="priceESP1400" value="78" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 1600</label><input type="number" id="priceESP1600" value="85" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 1800</label><input type="number" id="priceESP1800" value="92" step="0.5" class="price-input"></div>
-                    <div class="input-group"><label>سبالونة 2000</label><input type="number" id="priceESP2000" value="100" step="0.5" class="price-input"></div>
+                
+                <div class="bento-card">
+                    <div class="card-header">
+                        <div class="card-icon blue">📏</div>
+                        <h2 class="card-title" data-ar="الثوابت" data-en="Fixed Parts"></h2>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span data-ar="➡️ يمين" data-en="➡️ Right"></span></label>
+                            <input type="number" id="hingedFixedRight" value="0" step="0.1" oninput="calculateHinged();saveFormData();">
+                        </div>
+                        <div class="input-group">
+                            <label><span data-ar="⬅️ شمال" data-en="⬅️ Left"></span></label>
+                            <input type="number" id="hingedFixedLeft" value="0" step="0.1" oninput="calculateHinged();saveFormData();">
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span data-ar="⬆️ علوي" data-en="⬆️ Top"></span></label>
+                            <input type="number" id="hingedFixedTop" value="0" step="0.1" oninput="calculateHinged();saveFormData();">
+                        </div>
+                        <div class="input-group">
+                            <label><span data-ar="⬇️ سفلي" data-en="⬇️ Bottom"></span></label>
+                            <input type="number" id="hingedFixedBottom" value="0" step="0.1" oninput="calculateHinged();saveFormData();">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="calculateHinged()" style="margin-top:10px;">
+                        🔢 <span data-ar="احسب الآن" data-en="Calculate"></span>
+                    </button>
                 </div>
-
-                <div class="settings-buttons">
-                    <button class="button btn-save" onclick="savePricesManual()">💾 حفظ</button>
-                    <button class="button btn-reset" onclick="resetPrices()">🔄 ضبط مصنع</button>
-                    <button class="button" style="background:linear-gradient(135deg,#78909c,#546e7a)!important" onclick="changePassword()">🔑 كلمة السر</button>
+                
+                <div class="bento-card span-full">
+                    <div class="card-header">
+                        <div class="card-icon pink">📊</div>
+                        <h2 class="card-title" data-ar="النتائج التفصيلية" data-en="Detailed Results"></h2>
+                    </div>
+                    <div id="hingedResults"></div>
                 </div>
             </div>
-
-            <!-- قسم المقاسات -->
-            <div class="section">
-                <h2>📐 بيانات الشباك</h2>
-                <div class="input-group"><label>العرض الكلي (سم)</label><input type="number" id="width" value="150" step="0.1"></div>
-                <div class="input-group"><label>الارتفاع الكلي (سم)</label><input type="number" id="height" value="150" step="0.1"></div>
-                <div class="input-group">
-                    <label>نوع الحلق</label>
-                    <select id="frameType">
-                        <option value="701">KOM 701</option>
-                        <option value="705">KOM 705</option>
-                        <option value="708" selected>KOM 708</option>
-                    </select>
+        </div>
+        
+        <!-- Sliding Section -->
+        <div class="sliding-section" id="slidingSection">
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <div class="card-header">
+                        <div class="card-icon cyan">📐</div>
+                        <h2 class="card-title" data-ar="بيانات الشباك" data-en="Window Data"></h2>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span class="field-icon">↔️</span> <span data-ar="العرض (سم)" data-en="Width (cm)"></span></label>
+                            <input type="number" id="slidingWidth" value="200" step="0.1" oninput="calculateSliding();saveFormData();">
+                        </div>
+                        <div class="input-group">
+                            <label><span class="field-icon">↕️</span> <span data-ar="الارتفاع (سم)" data-en="Height (cm)"></span></label>
+                            <input type="number" id="slidingHeight" value="150" step="0.1" oninput="calculateSliding();saveFormData();">
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span class="field-icon">🎨</span> <span data-ar="اللون" data-en="Color"></span></label>
+                            <select id="slidingColor" onchange="calculateSliding();saveFormData();">
+                                <option value="white">⬜ أبيض</option>
+                                <option value="colored">🎨 ألوان</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label><span class="field-icon">🔢</span> <span data-ar="عدد الضلف" data-en="Sash Count"></span></label>
+                            <select id="slidingDoorCount" onchange="calculateSliding();saveFormData();">
+                                <option value="2">2 ضلفة</option>
+                                <option value="4">4 ضلفة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label><span class="field-icon">🏭</span> <span data-ar="القطاع" data-en="Profile"></span></label>
+                            <select id="slidingSystem" onchange="calculateSliding();saveFormData();">
+                                <option value="kompen">كومبن</option>
+                                <option value="craft">كرافت</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label><span class="field-icon">🏗️</span> <span data-ar="الحلق" data-en="Frame"></span></label>
+                            <select id="slidingFrameType" onchange="calculateSliding();saveFormData();">
+                                <option value="withoutBar">بدون بار</option>
+                                <option value="withBar">بالبار</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label><span class="field-icon">🪟</span> <span data-ar="النوع" data-en="Type"></span></label>
+                        <select id="slidingWindowType" onchange="calculateSliding();saveFormData();">
+                            <option value="شباك">شباك</option>
+                            <option value="باب">باب</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>نوع الفتحة</label>
-                    <select id="windowType">
-                        <option value="شباك" selected>شباك</option>
-                        <option value="باب">باب</option>
-                    </select>
+                
+                <div class="bento-card price-badge-card">
+                    <div class="price-badge-content">
+                        <div class="price-badge-icon">💰</div>
+                        <div class="price-badge-label" data-ar="السعر النهائي" data-en="Final Price"></div>
+                        <div class="price-badge-value" id="slidingFinalPrice">0.00</div>
+                        <div class="price-badge-currency">ريال</div>
+                        <div class="price-badge-secondary">
+                            <div class="price-per-meter" id="slidingPricePerMeter">📐 سعر المتر: 0.00 ريال/م²</div>
+                            <div class="price-badge-info">
+                                <span id="slidingBadgeArea">0 م²</span>
+                                <span id="slidingBadgeSystem">—</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>نوع التشغيل</label>
-                    <select id="operationType">
-                        <option value="مفصلي" selected>مفصلي (Turn)</option>
-                        <option value="قلاب">قلاب (Tilt)</option>
-                        <option value="ثابت+مفصلي">ثابت + مفصلي</option>
-                    </select>
+                
+                <div class="bento-card">
+                    <div class="card-header">
+                        <div class="card-icon orange">🔧</div>
+                        <h2 class="card-title" data-ar="خيارات إضافية" data-en="Extra Options"></h2>
+                    </div>
+                    <div class="checkbox-group" onclick="toggleCheckbox(this, 'slidingWithMesh')">
+                        <input type="checkbox" id="slidingWithMesh">
+                        <label data-ar="🪟 إضافة ضلفة سلك" data-en="🪟 Add Mesh Sash"></label>
+                    </div>
+                    <div class="checkbox-group checked" onclick="toggleCheckbox(this, 'slidingWithRoller')">
+                        <input type="checkbox" id="slidingWithRoller" checked>
+                        <label data-ar="🔘 إضافة عجل" data-en="🔘 Add Rollers"></label>
+                    </div>
+                    <div id="rollerTypeSection" style="margin-top:10px;">
+                        <label style="font-weight:600;margin-bottom:6px;display:block;font-size:0.85em;" data-ar="نوع العجل:" data-en="Roller Type:"></label>
+                        <div class="radio-group">
+                            <div class="radio-item selected" onclick="selectRoller('single')">
+                                <span data-ar="سنجل" data-en="Single"></span>
+                            </div>
+                            <div class="radio-item" onclick="selectRoller('double')">
+                                <span data-ar="دبل" data-en="Double"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-top:12px;">
+                        <label><span class="field-icon">💰</span> <span data-ar="إضافات (ريال/م²)" data-en="Extras (SAR/m²)"></span></label>
+                        <input type="number" id="slidingExtras" value="0" step="0.5" oninput="calculateSliding();saveFormData();">
+                    </div>
+                    <button class="btn btn-primary" onclick="calculateSliding()" style="margin-top:10px;">
+                        🔢 <span data-ar="احسب الآن" data-en="Calculate"></span>
+                    </button>
                 </div>
-                <div class="input-group">
-                    <label>عدد الضلف</label>
-                    <select id="doorCount">
-                        <option value="1">1 ضلفة</option>
-                        <option value="2" selected>2 ضلفة</option>
-                    </select>
+                
+                <div class="bento-card span-full">
+                    <div class="card-header">
+                        <div class="card-icon pink">📊</div>
+                        <h2 class="card-title" data-ar="النتائج التفصيلية" data-en="Detailed Results"></h2>
+                    </div>
+                    <div id="slidingResults"></div>
                 </div>
             </div>
-
-            <!-- الثوابت -->
-            <div class="section">
-                <h2>📏 الثوابت</h2>
-                <div class="input-group"><label>ثابت يمين (سم)</label><input type="number" id="fixedRight" value="0" step="0.1"></div>
-                <div class="input-group"><label>ثابت شمال (سم)</label><input type="number" id="fixedLeft" value="0" step="0.1"></div>
-                <div class="input-group"><label>ثابت علوي (سم)</label><input type="number" id="fixedTop" value="0" step="0.1"></div>
-                <div class="input-group"><label>ثابت سفلي (سم)</label><input type="number" id="fixedBottom" value="0" step="0.1"></div>
-                <button class="button btn-calc" onclick="calculate()">🔢 احسب</button>
+        </div>
+    </main>
+    
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h2>⚙️ <span data-ar="إعدادات الأسعار (ريال)" data-en="Price Settings (SAR)"></span></h2>
+                <button class="settings-close" onclick="closeSettings()">✕</button>
             </div>
-
-            <!-- النتائج -->
-            <div class="section" style="grid-column:1/-1">
-                <h2>📊 النتائج</h2>
-                <div id="results"></div>
+            <div style="padding:20px 24px 0;">
+                <div class="settings-tabs">
+                    <button class="settings-tab active" onclick="switchSettingsTab('hinged', this)">🚪 <span data-ar="المفصلي" data-en="Hinged"></span></button>
+                    <button class="settings-tab" onclick="switchSettingsTab('sliding', this)">🔄 <span data-ar="السحاب" data-en="Sliding"></span></button>
+                    <button class="settings-tab" onclick="switchSettingsTab('general', this)">⚙️ <span data-ar="عام" data-en="General"></span></button>
+                </div>
+            </div>
+            <div class="settings-body">
+                <!-- Hinged Settings -->
+                <div class="settings-tab-content active" id="hingedSettings">
+                    <div class="settings-grid">
+                        <div class="price-section ps-kompen">
+                            <h4>⬜ <span data-ar="كومبن أبيض" data-en="Kompen White"></span></h4>
+                            <div class="input-group"><label>بدون بار (701)</label><input type="number" id="price701W" value="25" step="0.1"></div>
+                            <div class="input-group"><label>بار صغير (705)</label><input type="number" id="price705W" value="23" step="0.1"></div>
+                            <div class="input-group"><label>بار عريض (708)</label><input type="number" id="price708W" value="24" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة شباك" data-en="Window Sash"></label><input type="number" id="priceSashW" value="22" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة باب" data-en="Door Sash"></label><input type="number" id="priceDoorW" value="25" step="0.1"></div>
+                            <div class="input-group"><label data-ar="سؤاس" data-en="Mullion"></label><input type="number" id="priceSawasW" value="20" step="0.1"></div>
+                            <div class="input-group"><label data-ar="بوكلير" data-en="T-Profile"></label><input type="number" id="priceTeeW" value="21" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="priceBakitaW" value="18" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-kompen-color">
+                            <h4>🎨 <span data-ar="كومبن ألوان" data-en="Kompen Colored"></span></h4>
+                            <div class="input-group"><label>بدون بار (701)</label><input type="number" id="price701C" value="32" step="0.1"></div>
+                            <div class="input-group"><label>بار صغير (705)</label><input type="number" id="price705C" value="30" step="0.1"></div>
+                            <div class="input-group"><label>بار عريض (708)</label><input type="number" id="price708C" value="31" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة شباك" data-en="Window Sash"></label><input type="number" id="priceSashC" value="29" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة باب" data-en="Door Sash"></label><input type="number" id="priceDoorC" value="32" step="0.1"></div>
+                            <div class="input-group"><label data-ar="سؤاس" data-en="Mullion"></label><input type="number" id="priceSawasC" value="27" step="0.1"></div>
+                            <div class="input-group"><label data-ar="بوكلير" data-en="T-Profile"></label><input type="number" id="priceTeeC" value="28" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="priceBakitaC" value="24" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-craft">
+                            <h4>🔷 <span data-ar="كرافت أبيض" data-en="Craft White"></span></h4>
+                            <div class="input-group"><label>بالبار (710)</label><input type="number" id="price710W" value="24" step="0.1"></div>
+                            <div class="input-group"><label>بدون بار (711)</label><input type="number" id="price711W" value="25" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة شباك" data-en="Window Sash"></label><input type="number" id="priceSashCraftW" value="24" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة باب" data-en="Door Sash"></label><input type="number" id="priceDoorCraftW" value="27" step="0.1"></div>
+                            <div class="input-group"><label data-ar="سؤاس" data-en="Mullion"></label><input type="number" id="priceSawasCraftW" value="22" step="0.1"></div>
+                            <div class="input-group"><label data-ar="بوكلير" data-en="T-Profile"></label><input type="number" id="priceTeeCraftW" value="23" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="priceBakitaCraftW" value="20" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-craft-color">
+                            <h4>🔷🎨 <span data-ar="كرافت ألوان" data-en="Craft Colored"></span></h4>
+                            <div class="input-group"><label>بالبار (710)</label><input type="number" id="price710C" value="32" step="0.1"></div>
+                            <div class="input-group"><label>بدون بار (711)</label><input type="number" id="price711C" value="33" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة شباك" data-en="Window Sash"></label><input type="number" id="priceSashCraftC" value="31" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة باب" data-en="Door Sash"></label><input type="number" id="priceDoorCraftC" value="34" step="0.1"></div>
+                            <div class="input-group"><label data-ar="سؤاس" data-en="Mullion"></label><input type="number" id="priceSawasCraftC" value="29" step="0.1"></div>
+                            <div class="input-group"><label data-ar="بوكلير" data-en="T-Profile"></label><input type="number" id="priceTeeCraftC" value="30" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="priceBakitaCraftC" value="26" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-accessories">
+                            <h4>🔧 <span data-ar="إكسسوارات" data-en="Accessories"></span></h4>
+                            <div class="input-group"><label data-ar="مفصلة" data-en="Hinge"></label><input type="number" id="priceHinge" value="15" step="0.5"></div>
+                            <div class="input-group"><label data-ar="سكاك" data-en="Striker"></label><input type="number" id="priceStriker" value="8" step="0.5"></div>
+                            <div class="input-group"><label data-ar="مقبض شباك" data-en="Window Handle"></label><input type="number" id="priceWinHandle" value="35" step="0.5"></div>
+                            <div class="input-group"><label data-ar="مقبض باب" data-en="Door Handle"></label><input type="number" id="priceDoorHandle" value="65" step="0.5"></div>
+                            <div class="input-group"><label data-ar="ذراع قلاب" data-en="Tilt Arm"></label><input type="number" id="priceTiltArm" value="25" step="0.5"></div>
+                            <div class="input-group"><label data-ar="ترباس" data-en="Shootbolt"></label><input type="number" id="priceShootbolt" value="12" step="0.5"></div>
+                            <div class="input-group"><label data-ar="نهاية قائم" data-en="Mullion Cap"></label><input type="number" id="priceMullionCap" value="5" step="0.5"></div>
+                            <div class="input-group"><label>سنترلوك 160</label><input type="number" id="priceLock160" value="85" step="0.5"></div>
+                            <div class="input-group"><label>سنترلوك 180</label><input type="number" id="priceLock180" value="105" step="0.5"></div>
+                        </div>
+                        <div class="price-section ps-espagnolette">
+                            <h4>📏 <span data-ar="السبالونات" data-en="Espagnolettes"></span></h4>
+                            <div class="input-group"><label>سبالونة 400</label><input type="number" id="priceESP400" value="45" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 600</label><input type="number" id="priceESP600" value="52" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 800</label><input type="number" id="priceESP800" value="58" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1000</label><input type="number" id="priceESP1000" value="65" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1200</label><input type="number" id="priceESP1200" value="72" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1400</label><input type="number" id="priceESP1400" value="78" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1600</label><input type="number" id="priceESP1600" value="85" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1800</label><input type="number" id="priceESP1800" value="92" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 2000</label><input type="number" id="priceESP2000" value="100" step="0.5"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sliding Settings -->
+                <div class="settings-tab-content" id="slidingSettings">
+                    <div class="settings-grid">
+                        <div class="price-section ps-sliding">
+                            <h4>⬜ <span data-ar="كومبن سحاب أبيض" data-en="Kompen Sliding White"></span></h4>
+                            <div class="input-group"><label data-ar="حلق بدون بار" data-en="Frame Without Bar"></label><input type="number" id="slidingFrameKompenW" value="26" step="0.1"></div>
+                            <div class="input-group"><label data-ar="حلق بالبار" data-en="Frame With Bar"></label><input type="number" id="slidingFrameBarKompenW" value="28" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة شباك" data-en="Window Sash"></label><input type="number" id="slidingSashKompenW" value="24" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة باب" data-en="Door Sash"></label><input type="number" id="slidingDoorKompenW" value="27" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة سلك" data-en="Mesh Sash"></label><input type="number" id="slidingMeshKompenW" value="20" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تراك" data-en="Track"></label><input type="number" id="slidingTrackKompenW" value="18" step="0.1"></div>
+                            <div class="input-group"><label data-ar="طبة/سكينة صغيرة (شباك)" data-en="Small Tobba (Window)"></label><input type="number" id="slidingTobbaSmallKompenW" value="20" step="0.1"></div>
+                            <div class="input-group"><label data-ar="طبة/سكينة كبيرة (باب)" data-en="Large Tobba (Door)"></label><input type="number" id="slidingTobbaLargeKompenW" value="24" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تقابل" data-en="Interlock"></label><input type="number" id="slidingInterlockKompenW" value="20" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="slidingBakitaKompenW" value="18" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-kompen-color">
+                            <h4>🎨 <span data-ar="كومبن سحاب ألوان" data-en="Kompen Sliding Colored"></span></h4>
+                            <div class="input-group"><label data-ar="حلق بدون بار" data-en="Frame Without Bar"></label><input type="number" id="slidingFrameKompenC" value="34" step="0.1"></div>
+                            <div class="input-group"><label data-ar="حلق بالبار" data-en="Frame With Bar"></label><input type="number" id="slidingFrameBarKompenC" value="36" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة شباك" data-en="Window Sash"></label><input type="number" id="slidingSashKompenC" value="32" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة باب" data-en="Door Sash"></label><input type="number" id="slidingDoorKompenC" value="35" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة سلك" data-en="Mesh Sash"></label><input type="number" id="slidingMeshKompenC" value="28" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تراك" data-en="Track"></label><input type="number" id="slidingTrackKompenC" value="24" step="0.1"></div>
+                            <div class="input-group"><label data-ar="طبة/سكينة صغيرة (شباك)" data-en="Small Tobba (Window)"></label><input type="number" id="slidingTobbaSmallKompenC" value="28" step="0.1"></div>
+                            <div class="input-group"><label data-ar="طبة/سكينة كبيرة (باب)" data-en="Large Tobba (Door)"></label><input type="number" id="slidingTobbaLargeKompenC" value="32" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تقابل" data-en="Interlock"></label><input type="number" id="slidingInterlockKompenC" value="28" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="slidingBakitaKompenC" value="24" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-craft">
+                            <h4>🔷 <span data-ar="كرافت سحاب أبيض" data-en="Craft Sliding White"></span></h4>
+                            <div class="input-group"><label data-ar="حلق بدون بار" data-en="Frame Without Bar"></label><input type="number" id="slidingFrameCraftW" value="27" step="0.1"></div>
+                            <div class="input-group"><label data-ar="حلق بالبار" data-en="Frame With Bar"></label><input type="number" id="slidingFrameBarCraftW" value="29" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة" data-en="Sash"></label><input type="number" id="slidingSashCraftW" value="25" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة سلك" data-en="Mesh Sash"></label><input type="number" id="slidingMeshCraftW" value="21" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تراك" data-en="Track"></label><input type="number" id="slidingTrackCraftW" value="19" step="0.1"></div>
+                            <div class="input-group"><label data-ar="طبة/سكينة" data-en="Tobba"></label><input type="number" id="slidingTobbaCraftW" value="23" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تقابل" data-en="Interlock"></label><input type="number" id="slidingInterlockCraftW" value="21" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="slidingBakitaCraftW" value="19" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-craft-color">
+                            <h4>🔷🎨 <span data-ar="كرافت سحاب ألوان" data-en="Craft Sliding Colored"></span></h4>
+                            <div class="input-group"><label data-ar="حلق بدون بار" data-en="Frame Without Bar"></label><input type="number" id="slidingFrameCraftC" value="35" step="0.1"></div>
+                            <div class="input-group"><label data-ar="حلق بالبار" data-en="Frame With Bar"></label><input type="number" id="slidingFrameBarCraftC" value="37" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة" data-en="Sash"></label><input type="number" id="slidingSashCraftC" value="33" step="0.1"></div>
+                            <div class="input-group"><label data-ar="ضلفة سلك" data-en="Mesh Sash"></label><input type="number" id="slidingMeshCraftC" value="29" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تراك" data-en="Track"></label><input type="number" id="slidingTrackCraftC" value="25" step="0.1"></div>
+                            <div class="input-group"><label data-ar="طبة/سكينة" data-en="Tobba"></label><input type="number" id="slidingTobbaCraftC" value="31" step="0.1"></div>
+                            <div class="input-group"><label data-ar="تقابل" data-en="Interlock"></label><input type="number" id="slidingInterlockCraftC" value="29" step="0.1"></div>
+                            <div class="input-group"><label data-ar="باكته" data-en="Bead"></label><input type="number" id="slidingBakitaCraftC" value="25" step="0.1"></div>
+                        </div>
+                        <div class="price-section ps-accessories">
+                            <h4>🔧 <span data-ar="إكسسوارات السحاب" data-en="Sliding Accessories"></span></h4>
+                            <div class="input-group"><label data-ar="عجل سنجل" data-en="Single Roller"></label><input type="number" id="priceRollerSingle" value="25" step="0.5"></div>
+                            <div class="input-group"><label data-ar="عجل دبل" data-en="Double Roller"></label><input type="number" id="priceRollerDouble" value="40" step="0.5"></div>
+                            <div class="input-group"><label data-ar="مقبض بارز" data-en="D-Handle"></label><input type="number" id="priceHandleD" value="35" step="0.5"></div>
+                            <div class="input-group"><label data-ar="مقبض غاطس" data-en="Flush Handle"></label><input type="number" id="priceHandleFlush" value="25" step="0.5"></div>
+                            <div class="input-group"><label data-ar="مانع رفع" data-en="Anti-Lift"></label><input type="number" id="priceAntiLift" value="15" step="0.5"></div>
+                        </div>
+                        <div class="price-section ps-espagnolette">
+                            <h4>📏 <span data-ar="سبالونات السحاب" data-en="Sliding Espagnolettes"></span></h4>
+                            <div class="input-group"><label>سبالونة 600</label><input type="number" id="priceSlidingESP600" value="55" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1000</label><input type="number" id="priceSlidingESP1000" value="68" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1200</label><input type="number" id="priceSlidingESP1200" value="75" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1400</label><input type="number" id="priceSlidingESP1400" value="82" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1600</label><input type="number" id="priceSlidingESP1600" value="90" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 1800</label><input type="number" id="priceSlidingESP1800" value="98" step="0.5"></div>
+                            <div class="input-group"><label>سبالونة 2000</label><input type="number" id="priceSlidingESP2000" value="105" step="0.5"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- General Settings -->
+                <div class="settings-tab-content" id="generalSettings">
+                    <div class="settings-grid">
+                        <div class="price-section">
+                            <h4>💎 <span data-ar="إعدادات عامة" data-en="General Settings"></span></h4>
+                            <div class="input-group"><label data-ar="زجاج (ريال/م²)" data-en="Glass (SAR/m²)"></label><input type="number" id="priceGlass" value="50" step="0.1"></div>
+                            <div class="input-group"><label data-ar="نسبة الهدر %" data-en="Waste %"></label><input type="number" id="wastePercent" value="5" step="0.5"></div>
+                            <div class="input-group"><label data-ar="الربح (ريال/م²)" data-en="Profit (SAR/m²)"></label><input type="number" id="profitPerM2" value="50" step="1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-buttons">
+                <button class="btn btn-success" onclick="savePrices()">💾 <span data-ar="حفظ" data-en="Save"></span></button>
+                <button class="btn btn-warning" onclick="resetPrices()">🔄 <span data-ar="إعادة ضبط" data-en="Reset"></span></button>
+                <button class="btn btn-dark" onclick="changePassword()">🔑 <span data-ar="كلمة السر" data-en="Password"></span></button>
             </div>
         </div>
     </div>
-
-    <!-- الفاتورة -->
-    <div class="invoice" id="invoice">
-        <div class="invoice-header">
-            <h1>🏭 WINDOORA</h1>
-            <p>فاتورة حساب الشباك</p>
-            <p>التاريخ: <span id="invoiceDate"></span></p>
-        </div>
-        <div id="invoiceContent"></div>
-        <button class="button print-button" onclick="shareInvoice()">📤 مشاركة الفاتورة</button>
-        <button class="button" style="background:linear-gradient(135deg,#667eea,#764ba2);margin-top:10px" onclick="window.print()">🖨️ طباعة</button>
-    </div>
-
+    
     <script>
-    // ===== شاشة البداية =====
-    setTimeout(()=>{
-        const s=document.getElementById('splashScreen');
-        s.classList.add('hide');
-        setTimeout(()=>s.style.display='none',500);
-    },1500);
-
-    // ===== كلمة السر =====
-    const DEFAULT_PASSWORD='1234';
-    function getPassword(){return localStorage.getItem('windooraPassword')||DEFAULT_PASSWORD}
-
-    let pricesVisible=false;
-
-    function togglePrices(){
-        if(!pricesVisible){
-            document.getElementById('lockOverlay').classList.add('show');
-            document.getElementById('passwordInput').value='';
-            setTimeout(()=>document.getElementById('passwordInput').focus(),100);
-            document.getElementById('errorMsg').style.display='none';
-        }else{hidePrices()}
-    }
-
-    function checkPassword(){
-        const input=document.getElementById('passwordInput').value;
-        if(input===getPassword()){closeLock();showPrices()}
-        else{
-            document.getElementById('errorMsg').style.display='block';
-            document.getElementById('passwordInput').value='';
-            document.getElementById('passwordInput').focus();
-            const box=document.querySelector('.lock-box');
-            box.style.animation='shake 0.5s';
-            setTimeout(()=>box.style.animation='',500);
-            if(navigator.vibrate)navigator.vibrate(200);
+        // ==================== المتغيرات العامة ====================
+        let currentSystem = 'hinged';
+        let rollerType = 'single';
+        let currentLang = 'ar';
+        const DEFAULT_PASSWORD = '1234';
+        const CURRENCY = 'ريال';
+        const CURRENCY_EN = 'SAR';
+        
+        // ==================== بيانات البروفايلات ====================
+        const HINGED_PROFILES = {
+            '701': {name: 'بدون بار كومبن', nameEn: 'Without Bar Kompen', code: '701', system: 'kompen', frameAddition: 0.6, frameDiscount: 4.2, overlap: 1.6, clearance: 0.6, glassDiscountWindow: 14, glassDiscountDoor: 18.6, sawasDiscount: 4.2, teeDiscount: 8.2, bakitaAddition: 1},
+            '705': {name: 'بار صغير كومبن', nameEn: 'Small Bar Kompen', code: '705', system: 'kompen', frameAddition: 8.2, frameDiscount: 3.1, overlap: 1.6, clearance: 0.6, glassDiscountWindow: 14, glassDiscountDoor: 18.6, sawasDiscount: 4.2, teeDiscount: 8.2, bakitaAddition: 1},
+            '708': {name: 'بار عريض كومبن', nameEn: 'Wide Bar Kompen', code: '708', system: 'kompen', frameAddition: 11.2, frameDiscount: 3.7, overlap: 1.6, clearance: 0.6, glassDiscountWindow: 14, glassDiscountDoor: 18.6, sawasDiscount: 4.2, teeDiscount: 8.2, bakitaAddition: 1},
+            '710': {name: 'بالبار كرافت', nameEn: 'With Bar Craft', code: '710', system: 'craft', frameAddition: 10.6, frameDiscount: 3.8, overlap: 1.6, clearance: 0.6, glassDiscountWindow: 13, glassDiscountDoor: 17.5, sawasDiscount: 4.2, teeDiscount: 8.2, bakitaAddition: 1},
+            '711': {name: 'بدون بار كرافت', nameEn: 'Without Bar Craft', code: '711', system: 'craft', frameAddition: 0.6, frameDiscount: 4.2, overlap: 1.6, clearance: 0.6, glassDiscountWindow: 14, glassDiscountDoor: 18.6, sawasDiscount: 4.2, teeDiscount: 8.2, bakitaAddition: 1}
+        };
+        
+        const SLIDING_PROFILES = {
+            kompen: {
+                withoutBar: {frameAddition: 0.6},
+                withBar: {frameAddition: 11.2},
+                sash2Window: {widthFormula: (w) => (w/2) + 0.7, heightDiscount: 7.2},
+                sash2Door: {widthFormula: (w) => (w/2) + 1.7, heightDiscount: 7.2},
+                sash4Window: {widthFormula: (w) => (w/4) + 2.4, heightDiscount: 7.2},
+                sash4Door: {widthFormula: (w) => (w/4) + 3.5, heightDiscount: 7.2},
+                mesh2Window: {widthFormula: (w) => w/2, heightDiscount: 5.2},
+                mesh2Door: {widthFormula: (w) => (w/2) + 1, heightDiscount: 5.2},
+                mesh4Window: {widthFormula: (w) => (w/4) + 1, heightDiscount: 5.2},
+                mesh4Door: {widthFormula: (w) => (w/4) + 5, heightDiscount: 5.2},
+                glassDiscountWindow: 13.5,
+                glassDiscountDoor: 17.5,
+                trackDiscount: 9.4,
+                bakitaAddition: 1
+            },
+            craft: {
+                withoutBar: {frameAddition: 0.6},
+                withBar: {frameAddition: 10.6},
+                sash: {widthFormula: (w) => (w/2) + 1.2, heightDiscount: 7.2},
+                mesh: {widthFormula: (w) => w/2, heightDiscount: 5.2},
+                glassDiscount: 15.5,
+                trackDiscount: 9.4,
+                bakitaAddition: 1
+            }
+        };
+        
+        const ESP_TABLE = [
+            {minH: 60, maxH: 100, size: '600', hooks: 2},
+            {minH: 101, maxH: 120, size: '1000', hooks: 2},
+            {minH: 121, maxH: 140, size: '1200', hooks: 2},
+            {minH: 141, maxH: 160, size: '1400', hooks: 3},
+            {minH: 161, maxH: 180, size: '1600', hooks: 3},
+            {minH: 181, maxH: 220, size: '1800', hooks: 4},
+            {minH: 221, maxH: 999, size: '2000', hooks: 4}
+        ];
+        
+        // ==================== الدوال المساعدة ====================
+        function getVal(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+        function getPassword() { return localStorage.getItem('windooraPasswordSAR') || DEFAULT_PASSWORD; }
+        function getESP(h) { for (let e of ESP_TABLE) { if (h >= e.minH && h <= e.maxH) return e; } return ESP_TABLE[ESP_TABLE.length - 1]; }
+        function getText(ar, en) { return currentLang === 'ar' ? ar : en; }
+        function getCurrency() { return currentLang === 'ar' ? CURRENCY : CURRENCY_EN; }
+        
+        // ==================== دوال اللغة ====================
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            applyLanguage();
+            localStorage.setItem('windooraLangSAR', currentLang);
+            saveFormData();
         }
-    }
-
-    function showPrices(){
-        pricesVisible=true;
-        document.getElementById('settingsSection').classList.add('visible');
-        document.getElementById('toggleBtn').classList.add('open');
-        document.getElementById('toggleIcon').textContent='🔓';
-        document.getElementById('toggleText').textContent='إخفاء إعدادات الأسعار';
-        document.getElementById('toggleBtn').style.background='linear-gradient(135deg,#43a047,#66bb6a)';
-    }
-
-    function hidePrices(){
-        pricesVisible=false;
-        document.getElementById('settingsSection').classList.remove('visible');
-        document.getElementById('toggleBtn').classList.remove('open');
-        document.getElementById('toggleIcon').textContent='🔒';
-        document.getElementById('toggleText').textContent='عرض إعدادات الأسعار';
-        document.getElementById('toggleBtn').style.background='linear-gradient(135deg,#ff9800,#f57c00)';
-    }
-
-    function closeLock(){document.getElementById('lockOverlay').classList.remove('show')}
-
-    function changePassword(){
-        const c=prompt('أدخل كلمة السر الحالية:');
-        if(c!==getPassword()){alert('❌ كلمة السر غير صحيحة!');return}
-        const n=prompt('أدخل كلمة السر الجديدة:');
-        if(n&&n.trim()!==''){
-            const cf=prompt('أعد كتابة كلمة السر الجديدة:');
-            if(n===cf){localStorage.setItem('windooraPassword',n);alert('✅ تم تغيير كلمة السر!')}
-            else{alert('❌ غير متطابقة!')}
-        }
-    }
-
-    // ===== حفظ الأسعار =====
-    const priceInputIds=['price701','price705','price708','priceDoor','priceDoorWindow','priceSawas','priceTee','priceGlass','priceBakita','exchangeRate','profitMargin','priceHinge','priceStriker','priceWinHandle','priceDoorHandle','priceTiltStay','priceShootbolt','priceMullionCap','priceLock160','priceLock180','priceESP400','priceESP600','priceESP800','priceESP1000','priceESP1200','priceESP1400','priceESP1600','priceESP1800','priceESP2000'];
-
-    function savePrices(){
-        const p={};
-        priceInputIds.forEach(id=>{const el=document.getElementById(id);if(el)p[id]=el.value});
-        localStorage.setItem('windooraPrices',JSON.stringify(p));
-    }
-
-    function savePricesManual(){savePrices();showSaveNotification();if(navigator.vibrate)navigator.vibrate(100)}
-
-    function loadPrices(){
-        const saved=localStorage.getItem('windooraPrices');
-        if(saved){try{const p=JSON.parse(saved);priceInputIds.forEach(id=>{const el=document.getElementById(id);if(el&&p[id]!==undefined)el.value=p[id]})}catch(e){}}
-    }
-
-    function resetPrices(){if(confirm('إعادة ضبط جميع الأسعار للقيم الافتراضية؟')){localStorage.removeItem('windooraPrices');location.reload()}}
-
-    function showSaveNotification(){
-        const n=document.getElementById('saveNotification');
-        n.classList.add('show');
-        setTimeout(()=>n.classList.remove('show'),2500);
-    }
-
-    // ===== مشاركة =====
-    async function shareInvoice(){
-        const d=window.calculationData;
-        if(!d)return;
-        if(navigator.share){
-            try{
-                await navigator.share({
-                    title:'Windoora - فاتورة',
-                    text:`🏭 WINDOORA\n📐 ${d.width}×${d.height} سم\n🚪 ${d.windowType} - ${d.doorCount} ضلفة\n💰 ${d.sellingPrice.toFixed(2)} ريال\n💵 ${d.sellingPriceEGP.toFixed(2)} جنيه`
-                });
-            }catch(e){}
-        }else{window.print()}
-    }
-
-    // ===== PWA Install =====
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt',e=>{
-        e.preventDefault();deferredPrompt=e;
-        document.getElementById('installBanner').classList.add('show');
-    });
-    function installApp(){
-        if(deferredPrompt){
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(()=>{
-                document.getElementById('installBanner').classList.remove('show');
-                deferredPrompt=null;
+        
+        function applyLanguage() {
+            const html = document.documentElement;
+            const langBtn = document.querySelector('.lang-toggle');
+            if (currentLang === 'ar') {
+                html.setAttribute('lang', 'ar');
+                html.setAttribute('dir', 'rtl');
+                langBtn.textContent = 'EN';
+            } else {
+                html.setAttribute('lang', 'en');
+                html.setAttribute('dir', 'ltr');
+                langBtn.textContent = 'ع';
+            }
+            document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+                el.textContent = currentLang === 'ar' ? el.dataset.ar : el.dataset.en;
             });
+            if (currentSystem === 'hinged') calculateHinged();
+            else calculateSliding();
         }
-    }
-    function dismissInstall(){document.getElementById('installBanner').classList.remove('show')}
-    window.addEventListener('appinstalled',()=>{document.getElementById('installBanner').classList.remove('show')});
-
-    // ===== دالة الحساب =====
-    function calculate(){
-        const width=parseFloat(document.getElementById('width').value);
-        const height=parseFloat(document.getElementById('height').value);
-        const frameType=document.getElementById('frameType').value;
-        const windowType=document.getElementById('windowType').value;
-        const opType=document.getElementById('operationType').value;
-        const doorCount=parseInt(document.getElementById('doorCount').value);
-        const fixedRight=parseFloat(document.getElementById('fixedRight').value);
-        const fixedLeft=parseFloat(document.getElementById('fixedLeft').value);
-        const fixedTop=parseFloat(document.getElementById('fixedTop').value);
-        const fixedBottom=parseFloat(document.getElementById('fixedBottom').value);
-
-        const prices={'701':parseFloat(document.getElementById('price701').value),'705':parseFloat(document.getElementById('price705').value),'708':parseFloat(document.getElementById('price708').value),door:parseFloat(document.getElementById('priceDoor').value),doorWindow:parseFloat(document.getElementById('priceDoorWindow').value),sawas:parseFloat(document.getElementById('priceSawas').value),tee:parseFloat(document.getElementById('priceTee').value),glass:parseFloat(document.getElementById('priceGlass').value),bakita:parseFloat(document.getElementById('priceBakita').value)};
-
-        const exchangeRate=parseFloat(document.getElementById('exchangeRate').value);
-        const profitMargin=parseFloat(document.getElementById('profitMargin').value);
-        const frameDiscount=frameType==='701'?4.2:(frameType==='705'?3.1:3.7);
-        let frameAddition=frameType==='701'?0.6:(frameType==='705'?8.2:11.2);
-
-        const lightOpeningWidth=width-(frameDiscount*2)-fixedRight-fixedLeft;
-        const lightOpeningHeight=height-(frameDiscount*2)-fixedTop-fixedBottom;
-        const frameWidth=width+frameAddition;
-        const frameHeight=height+frameAddition;
-
-        let doorWidth;
-        if(doorCount===1||windowType==='باب'){doorWidth=lightOpeningWidth+1.6+0.6}
-        else{doorWidth=((lightOpeningWidth+1.6-0.6)/2)+0.6}
-        const doorHeight=lightOpeningHeight+1.6+0.6;
-
-        const glassDiscount=windowType==='شباك'?14:18.6;
-        const glassWidth=doorWidth-glassDiscount;
-        const glassHeight=doorHeight-glassDiscount;
-
-        const glassFixedRight=fixedRight>0?{width:fixedRight-1,height:height-(frameDiscount*2)-1}:null;
-        const glassFixedLeft=fixedLeft>0?{width:fixedLeft-1,height:height-(frameDiscount*2)-1}:null;
-        const glassFixedTop=fixedTop>0?{width:width-(frameDiscount*2)-1,height:fixedTop-1}:null;
-        const glassFixedBottom=fixedBottom>0?{width:width-(frameDiscount*2)-1,height:fixedBottom-1}:null;
-
-        const bakitaWidth=glassWidth+1;const bakitaHeight=glassHeight+1;
-        const bakitaFixedRight=glassFixedRight?{width:glassFixedRight.width+1,height:glassFixedRight.height+1}:null;
-        const bakitaFixedLeft=glassFixedLeft?{width:glassFixedLeft.width+1,height:glassFixedLeft.height+1}:null;
-        const bakitaFixedTop=glassFixedTop?{width:glassFixedTop.width+1,height:glassFixedTop.height+1}:null;
-        const bakitaFixedBottom=glassFixedBottom?{width:glassFixedBottom.width+1,height:glassFixedBottom.height+1}:null;
-
-        let sawasList=[],sawasCount=0,totalSawasLM=0;
-        if(fixedRight>0){let v=height-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت يمين',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
-        if(fixedLeft>0){let v=height-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت شمال',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
-        if(fixedTop>0){let v=width-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت علوي',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
-        if(fixedBottom>0){let v=width-(frameDiscount*2)-4.2;sawasList.push({name:'سؤاس ثابت سفلي',value:v,count:1});sawasCount++;totalSawasLM+=(v/100)}
-
-        let tee=0,teeCount=0;
-        if(doorCount===2&&windowType!=='باب'){tee=doorHeight-8.2;teeCount=1}
-
-        const totalFrameLM=(frameWidth*2+frameHeight*2)/100;
-        const totalDoorLM=(doorWidth*doorCount*2+doorHeight*doorCount*2)/100;
-        const totalTeeLM=teeCount>0?(tee*teeCount)/100:0;
-
-        let totalGlassArea=(glassWidth*glassHeight/10000)*doorCount;
-        if(glassFixedRight)totalGlassArea+=(glassFixedRight.width*glassFixedRight.height/10000);
-        if(glassFixedLeft)totalGlassArea+=(glassFixedLeft.width*glassFixedLeft.height/10000);
-        if(glassFixedTop)totalGlassArea+=(glassFixedTop.width*glassFixedTop.height/10000);
-        if(glassFixedBottom)totalGlassArea+=(glassFixedBottom.width*glassFixedBottom.height/10000);
-
-        let totalBakitaLM=((bakitaWidth+bakitaHeight)*2/100)*doorCount;
-        [bakitaFixedRight,bakitaFixedLeft,bakitaFixedTop,bakitaFixedBottom].forEach(b=>{if(b)totalBakitaLM+=(b.width+b.height)*2/100});
-
-        let area=(width*height)/10000;if(area<1)area=1;
-
-        const framePrice=totalFrameLM*prices[frameType];
-        const doorUnitPrice=windowType==='باب'?prices.doorWindow:prices.door;
-        const doorPrice=totalDoorLM*doorUnitPrice;
-
-        let sawasPrice=0;
-        sawasList.forEach(s=>sawasPrice+=(s.value/100)*s.count*prices.sawas);
-
-        const teePrice=teeCount>0?totalTeeLM*prices.tee:0;
-        const glassPrice=totalGlassArea*prices.glass;
-        let bakitaPrice=totalBakitaLM*prices.bakita;
-
-        const acc=calculateAccessories(windowType,opType,doorCount,height);
-        let accTotal=0;
-        let accHTML='<div class="result-box"><h3>🔧 الإكسسوارات</h3>';
-        acc.forEach(item=>{const t=item.qty*item.price;accTotal+=t;accHTML+=`<div class="result-item"><span class="result-label">${item.name} (×${item.qty})</span><span class="result-value">${t.toFixed(2)} ريال</span></div>`});
-        accHTML+='</div>';
-
-        const totalCost=framePrice+doorPrice+sawasPrice+teePrice+glassPrice+bakitaPrice+accTotal;
-        const pricePerMeter=totalCost/area;
-        const sellingPrice=totalCost*(1+profitMargin/100);
-        const sellingPriceEGP=sellingPrice*exchangeRate;
-
-        let r=`
-            <div class="result-box"><h3>📐 الحلق (KOM ${frameType})</h3>
-            <div class="result-item"><span class="result-label">عرض:</span><span class="result-value">${frameWidth.toFixed(1)} سم × 2</span></div>
-            <div class="result-item"><span class="result-label">ارتفاع:</span><span class="result-value">${frameHeight.toFixed(1)} سم × 2</span></div>
-            <div class="summary-total">📏 إجمالي: ${totalFrameLM.toFixed(2)} م.ط</div></div>
-
-            <div class="result-box"><h3>🚪 الضلفة (${windowType})</h3>
-            <div class="result-item"><span class="result-label">عرض:</span><span class="result-value">${doorWidth.toFixed(1)} سم × ${doorCount*2}</span></div>
-            <div class="result-item"><span class="result-label">ارتفاع:</span><span class="result-value">${doorHeight.toFixed(1)} سم × ${doorCount*2}</span></div>
-            <div class="summary-total">📏 إجمالي: ${totalDoorLM.toFixed(2)} م.ط</div></div>
-
-            ${teeCount>0?`<div class="result-box"><h3>➕ التي</h3><div class="result-item"><span class="result-label">التي:</span><span class="result-value">${tee.toFixed(1)} سم × ${teeCount}</span></div><div class="summary-total">📏 إجمالي: ${totalTeeLM.toFixed(2)} م.ط</div></div>`:''}
-
-            ${sawasList.length>0?`<div class="result-box"><h3>📏 السؤاسات</h3>${sawasList.map(s=>`<div class="result-item"><span class="result-label">${s.name}:</span><span class="result-value">${s.value.toFixed(1)} سم</span></div>`).join('')}<div class="summary-total green">📏 إجمالي: ${totalSawasLM.toFixed(2)} م.ط</div></div>`:''}
-
-            <div class="result-box"><h3>🪟 الزجاج</h3>
-            <div class="result-item"><span class="result-label">ضلفة:</span><span class="result-value">${glassWidth.toFixed(1)}×${glassHeight.toFixed(1)} (×${doorCount})</span></div>
-            ${glassFixedRight?`<div class="result-item"><span class="result-label">ثابت يمين:</span><span class="result-value">${glassFixedRight.width.toFixed(1)}×${glassFixedRight.height.toFixed(1)}</span></div>`:''}
-            ${glassFixedLeft?`<div class="result-item"><span class="result-label">ثابت شمال:</span><span class="result-value">${glassFixedLeft.width.toFixed(1)}×${glassFixedLeft.height.toFixed(1)}</span></div>`:''}
-            ${glassFixedTop?`<div class="result-item"><span class="result-label">ثابت علوي:</span><span class="result-value">${glassFixedTop.width.toFixed(1)}×${glassFixedTop.height.toFixed(1)}</span></div>`:''}
-            ${glassFixedBottom?`<div class="result-item"><span class="result-label">ثابت سفلي:</span><span class="result-value">${glassFixedBottom.width.toFixed(1)}×${glassFixedBottom.height.toFixed(1)}</span></div>`:''}
-            <div class="summary-total orange">📐 إجمالي: ${totalGlassArea.toFixed(4)} م²</div></div>
-
-            <div class="result-box"><h3>📦 الباكيتا</h3>
-            <div class="result-item"><span class="result-label">ضلفة:</span><span class="result-value">${bakitaWidth.toFixed(1)}×${bakitaHeight.toFixed(1)} (×${doorCount})</span></div>
-            <div class="summary-total green">📏 إجمالي: ${totalBakitaLM.toFixed(2)} م.ط</div></div>
-
-            ${accHTML}
-
-            <div class="result-box" style="border-right-color:#ff9800"><h3>💰 التكلفة التفصيلية</h3>
-            <div class="result-item"><span class="result-label">الحلق:</span><span class="result-value">${framePrice.toFixed(2)} ريال</span></div>
-            <div class="result-item"><span class="result-label">الضلف:</span><span class="result-value">${doorPrice.toFixed(2)} ريال</span></div>
-            ${sawasList.length>0?`<div class="result-item"><span class="result-label">السؤاس:</span><span class="result-value">${sawasPrice.toFixed(2)} ريال</span></div>`:''}
-            ${teeCount>0?`<div class="result-item"><span class="result-label">التي:</span><span class="result-value">${teePrice.toFixed(2)} ريال</span></div>`:''}
-            <div class="result-item"><span class="result-label">الزجاج:</span><span class="result-value">${glassPrice.toFixed(2)} ريال</span></div>
-            <div class="result-item"><span class="result-label">الباكيتا:</span><span class="result-value">${bakitaPrice.toFixed(2)} ريال</span></div>
-            <div class="result-item"><span class="result-label">الإكسسوارات:</span><span class="result-value">${accTotal.toFixed(2)} ريال</span></div>
-            <div class="summary-total">إجمالي التكلفة: ${totalCost.toFixed(2)} ريال | م²: ${pricePerMeter.toFixed(2)} ريال</div></div>
-
-            <div class="total-box">
-            <h3>💵 السعر النهائي (+ ${profitMargin}%)</h3>
-            <div class="price">${sellingPrice.toFixed(2)} ريال</div>
-            <div style="font-size:1.4em;margin-top:10px">${sellingPriceEGP.toFixed(2)} جنيه</div></div>
-            <button class="button print-button" onclick="generateInvoice()">📄 إنشاء فاتورة</button>`;
-
-        document.getElementById('results').innerHTML=r;
-
-        window.calculationData={width,height,frameType,windowType,opType,doorCount,fixedRight,fixedLeft,fixedTop,fixedBottom,frameWidth,frameHeight,doorWidth,doorHeight,glassWidth,glassHeight,bakitaWidth,bakitaHeight,glassFixedRight,glassFixedLeft,glassFixedTop,glassFixedBottom,bakitaFixedRight,bakitaFixedLeft,bakitaFixedTop,bakitaFixedBottom,sawasList,tee,teeCount,area,frameAddition,framePrice,doorPrice,sawasPrice,teePrice,glassPrice,bakitaPrice,accTotal,acc,totalCost,pricePerMeter,sellingPrice,sellingPriceEGP,profitMargin,exchangeRate,sawasCount,doorUnitPrice,totalFrameLM,totalDoorLM,totalTeeLM,totalSawasLM,totalBakitaLM,totalGlassArea,prices};
-
-        if(navigator.vibrate)navigator.vibrate(50);
-    }
-
-    function calculateAccessories(type,opType,sashes,heightCm){
-        const gp=id=>parseFloat(document.getElementById(id).value)||0;
-        let acc=[];
-        let cams=0;
-        if(type==='باب'){
-            if(heightCm<=180){acc.push({name:'سنترلوك 160',qty:1,price:gp('priceLock160')});cams=3}
-            else{acc.push({name:'سنترلوك 180',qty:1,price:gp('priceLock180')});cams=4}
-        }else{
-            let es='';
-            if(heightCm<=60){es='400';cams=2}else if(heightCm<=80){es='600';cams=2}
-            else if(heightCm<=100){es='800';cams=2}else if(heightCm<=120){es='1000';cams=2}
-            else if(heightCm<=140){es='1200';cams=3}else if(heightCm<=160){es='1400';cams=3}
-            else if(heightCm<=180){es='1600';cams=3}else if(heightCm<=200){es='1800';cams=4}
-            else{es='2000';cams=4}
-            acc.push({name:'سبالونة '+es,qty:1,price:gp('priceESP'+es)});
+        
+        function loadLanguage() {
+            currentLang = localStorage.getItem('windooraLangSAR') || 'ar';
+            applyLanguage();
         }
-        let hq=0;
-        if(type==='باب')hq=4;else if(opType==='قلاب')hq=2;
-        else{hq=heightCm<=120?2:(heightCm<=200?3:4);hq*=sashes}
-        acc.push({name:'مفصلة موحدة',qty:hq,price:gp('priceHinge')});
-        let sq=cams;if(type!=='باب'&&sq<2)sq=2;
-        acc.push({name:'سكاك',qty:sq,price:gp('priceStriker')});
-        acc.push({name:type==='باب'?'مقبض باب':'مقبض شباك',qty:1,price:type==='باب'?gp('priceDoorHandle'):gp('priceWinHandle')});
-        if(opType==='قلاب')acc.push({name:'ذراع قلاب',qty:1,price:gp('priceTiltStay')});
-        if(sashes===2&&type!=='باب')acc.push({name:'ترباس يدوي',qty:2,price:gp('priceShootbolt')});
-        if(sashes===2||opType==='ثابت+مفصلي')acc.push({name:'كاب',qty:2,price:gp('priceMullionCap')});
-        return acc;
-    }
-
-    function generateInvoice(){
-        const d=window.calculationData;
-        if(!d){alert('احسب الشباك الأول!');return}
-        document.getElementById('invoiceDate').textContent=new Date().toLocaleDateString('ar-EG');
-        let h=`
-            <div class="invoice-section"><h3>📐 بيانات الفتحة</h3>
-            <table class="invoice-table">
-            <tr><td>المقاس</td><td>${d.width}×${d.height} سم</td></tr>
-            <tr><td>الحلق</td><td>KOM ${d.frameType}</td></tr>
-            <tr><td>النوع / التشغيل</td><td>${d.windowType} / ${d.opType}</td></tr>
-            <tr><td>الضلف</td><td>${d.doorCount}</td></tr>
-            <tr><td>المساحة</td><td>${d.area.toFixed(2)} م²</td></tr>
-            </table></div>
-            <div class="invoice-section"><h3>✂️ أمر القص</h3>
-            <table class="invoice-table">
-            <tr style="background:#e3f2fd"><td colspan="2"><strong>📐 الحلق</strong></td></tr>
-            <tr><td>عرض</td><td>${d.frameWidth.toFixed(1)} سم × 2</td></tr>
-            <tr><td>ارتفاع</td><td>${d.frameHeight.toFixed(1)} سم × 2</td></tr>
-            <tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalFrameLM.toFixed(2)} م.ط</strong></td></tr>
-            <tr style="background:#e3f2fd"><td colspan="2"><strong>🚪 الضلفة</strong></td></tr>
-            <tr><td>عرض</td><td>${d.doorWidth.toFixed(1)} سم × ${d.doorCount*2}</td></tr>
-            <tr><td>ارتفاع</td><td>${d.doorHeight.toFixed(1)} سم × ${d.doorCount*2}</td></tr>
-            <tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalDoorLM.toFixed(2)} م.ط</strong></td></tr>
-            ${d.teeCount>0?`<tr style="background:#e3f2fd"><td colspan="2"><strong>➕ التي</strong></td></tr><tr><td>التي</td><td>${d.tee.toFixed(1)} سم × ${d.teeCount}</td></tr><tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalTeeLM.toFixed(2)} م.ط</strong></td></tr>`:''}
-            ${d.sawasList.length>0?`<tr style="background:#e3f2fd"><td colspan="2"><strong>📏 السؤاس</strong></td></tr>${d.sawasList.map(s=>`<tr><td>${s.name}</td><td>${s.value.toFixed(1)} سم</td></tr>`).join('')}<tr style="background:#c8e6c9"><td><strong>إجمالي</strong></td><td><strong>${d.totalSawasLM.toFixed(2)} م.ط</strong></td></tr>`:''}
-            </table></div>
-            <div class="invoice-section"><h3>🪟 الزجاج والباكيتا</h3>
-            <table class="invoice-table">
-            <tr><td>زجاج الضلف</td><td>${d.glassWidth.toFixed(1)}×${d.glassHeight.toFixed(1)} (×${d.doorCount})</td></tr>
-            <tr style="background:#fff3e0"><td><strong>إجمالي الزجاج</strong></td><td><strong>${d.totalGlassArea.toFixed(4)} م²</strong></td></tr>
-            <tr><td>باكيتا</td><td>${d.bakitaWidth.toFixed(1)}×${d.bakitaHeight.toFixed(1)} (×${d.doorCount})</td></tr>
-            <tr style="background:#c8e6c9"><td><strong>إجمالي الباكيتا</strong></td><td><strong>${d.totalBakitaLM.toFixed(2)} م.ط</strong></td></tr>
-            </table></div>
-            <div class="invoice-section"><h3>🔧 الإكسسوارات</h3>
-            <table class="invoice-table">
-            ${d.acc.map(a=>`<tr><td>${a.name} (×${a.qty})</td><td>${(a.qty*a.price).toFixed(2)} ريال</td></tr>`).join('')}
-            </table></div>
-            <div class="invoice-section"><h3>💰 التكلفة النهائية</h3>
-            <table class="invoice-table">
-            <tr><td>إجمالي التكلفة</td><td>${d.totalCost.toFixed(2)} ريال</td></tr>
-            <tr><td>نسبة الربح</td><td>${d.profitMargin}%</td></tr>
-            <tr style="background:#c8e6c9"><td><strong>السعر النهائي (ريال)</strong></td><td><strong>${d.sellingPrice.toFixed(2)} ريال</strong></td></tr>
-            <tr style="background:#bbdefb"><td><strong>السعر النهائي (جنيه)</strong></td><td><strong>${d.sellingPriceEGP.toFixed(2)} جنيه</strong></td></tr>
-            </table></div>`;
-        document.getElementById('invoiceContent').innerHTML=h;
-        document.getElementById('invoice').classList.add('show');
-        document.getElementById('invoice').scrollIntoView({behavior:'smooth'});
-    }
-
-    // ===== تشغيل =====
-    window.onload=function(){
-        loadPrices();
-        priceInputIds.forEach(id=>{
-            const el=document.getElementById(id);
-            if(el)el.addEventListener('change',function(){savePrices();showSaveNotification()});
-        });
-        calculate();
-        if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
-    };
+        
+        // ==================== دوال الثيم ====================
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            if (body.dataset.theme === 'dark') {
+                body.dataset.theme = 'light';
+                btn.textContent = '🌙';
+                localStorage.setItem('windooraThemeSAR', 'light');
+            } else {
+                body.dataset.theme = 'dark';
+                btn.textContent = '☀️';
+                localStorage.setItem('windooraThemeSAR', 'dark');
+            }
+            saveFormData();
+        }
+        
+        function loadTheme() {
+            const t = localStorage.getItem('windooraThemeSAR') || 'light';
+            document.body.dataset.theme = t;
+            document.querySelector('.theme-toggle').textContent = t === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // ==================== دوال النظام ====================
+        function switchSystem(sys) {
+            currentSystem = sys;
+            document.getElementById('hingedSection').classList.remove('active');
+            document.getElementById('slidingSection').classList.remove('active');
+            document.getElementById('hingedBtn').classList.remove('active');
+            document.getElementById('slidingBtn').classList.remove('active');
+            document.getElementById('navHinged').classList.remove('active');
+            document.getElementById('navSliding').classList.remove('active');
+            
+            if (sys === 'hinged') {
+                document.getElementById('hingedSection').classList.add('active');
+                document.getElementById('hingedBtn').classList.add('active');
+                document.getElementById('navHinged').classList.add('active');
+                calculateHinged();
+            } else {
+                document.getElementById('slidingSection').classList.add('active');
+                document.getElementById('slidingBtn').classList.add('active');
+                document.getElementById('navSliding').classList.add('active');
+                calculateSliding();
+            }
+            saveFormData();
+            if (window.innerWidth <= 768) toggleSidebar();
+        }
+        
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        }
+        
+        // ==================== دوال الخيارات ====================
+        function toggleCheckbox(el, inputId) {
+            el.classList.toggle('checked');
+            document.getElementById(inputId).checked = !document.getElementById(inputId).checked;
+            if (inputId === 'slidingWithRoller') toggleRollerType();
+            calculateSliding();
+            saveFormData();
+        }
+        
+        function selectRoller(type) {
+            rollerType = type;
+            document.querySelectorAll('#rollerTypeSection .radio-item').forEach(i => i.classList.remove('selected'));
+            event.target.closest('.radio-item').classList.add('selected');
+            calculateSliding();
+            saveFormData();
+        }
+        
+        function toggleRollerType() {
+            document.getElementById('rollerTypeSection').style.display = document.getElementById('slidingWithRoller').checked ? 'block' : 'none';
+        }
+        
+        // ==================== دوال الإعدادات ====================
+        function toggleSettings() {
+            document.getElementById('lockOverlay').classList.add('show');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+        
+        function checkPassword() {
+            if (document.getElementById('passwordInput').value === getPassword()) {
+                closeLock();
+                document.getElementById('settingsPanel').classList.add('show');
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.querySelector('.lock-box').style.animation = 'shake 0.5s';
+                setTimeout(() => document.querySelector('.lock-box').style.animation = '', 500);
+            }
+        }
+        
+        function closeLock() { document.getElementById('lockOverlay').classList.remove('show'); }
+        function closeSettings() { document.getElementById('settingsPanel').classList.remove('show'); }
+        
+        function switchSettingsTab(tab, btn) {
+            document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.settings-tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(tab + 'Settings').classList.add('active');
+        }
+        
+        function changePassword() {
+            const c = prompt(getText('كلمة السر الحالية:', 'Current password:'));
+            if (c !== getPassword()) { alert(getText('❌ خطأ!', '❌ Wrong!')); return; }
+            const n = prompt(getText('الجديدة:', 'New:'));
+            if (n && n.trim()) {
+                const cf = prompt(getText('تأكيد:', 'Confirm:'));
+                if (n === cf) { localStorage.setItem('windooraPasswordSAR', n); alert(getText('✅ تم!', '✅ Done!')); }
+                else { alert(getText('❌ غير متطابقة!', '❌ Not match!')); }
+            }
+        }
+        
+        // ==================== دوال الحفظ ====================
+        function savePrices() {
+            const inputs = document.querySelectorAll('.settings-body input');
+            const p = {};
+            inputs.forEach(i => { if (i.id) p[i.id] = i.value; });
+            localStorage.setItem('windooraPricesSAR', JSON.stringify(p));
+            const n = document.getElementById('saveNotification');
+            n.querySelector('span').textContent = getText('تم الحفظ بنجاح', 'Saved');
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2500);
+            if (currentSystem === 'hinged') calculateHinged();
+            else calculateSliding();
+        }
+        
+        function loadPrices() {
+            const s = localStorage.getItem('windooraPricesSAR');
+            if (s) {
+                const p = JSON.parse(s);
+                Object.keys(p).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = p[id];
+                });
+            }
+        }
+        
+        function resetPrices() {
+            if (confirm(getText('إعادة ضبط؟', 'Reset?'))) {
+                localStorage.removeItem('windooraPricesSAR');
+                location.reload();
+            }
+        }
+        
+        function saveFormData() {
+            const data = {
+                currentSystem, currentLang, rollerType,
+                theme: document.body.dataset.theme,
+                hinged: {
+                    width: getVal('hingedWidth'),
+                    height: getVal('hingedHeight'),
+                    color: document.getElementById('hingedColor').value,
+                    doorCount: document.getElementById('hingedDoorCount').value,
+                    frameType: document.getElementById('hingedFrameType').value,
+                    windowType: document.getElementById('hingedWindowType').value,
+                    operationType: document.getElementById('hingedOperationType').value,
+                    fixedRight: getVal('hingedFixedRight'),
+                    fixedLeft: getVal('hingedFixedLeft'),
+                    fixedTop: getVal('hingedFixedTop'),
+                    fixedBottom: getVal('hingedFixedBottom')
+                },
+                sliding: {
+                    width: getVal('slidingWidth'),
+                    height: getVal('slidingHeight'),
+                    color: document.getElementById('slidingColor').value,
+                    doorCount: document.getElementById('slidingDoorCount').value,
+                    system: document.getElementById('slidingSystem').value,
+                    frameType: document.getElementById('slidingFrameType').value,
+                    windowType: document.getElementById('slidingWindowType').value,
+                    withMesh: document.getElementById('slidingWithMesh').checked,
+                    withRoller: document.getElementById('slidingWithRoller').checked,
+                    extras: getVal('slidingExtras')
+                }
+            };
+            localStorage.setItem('windooraFormDataSAR', JSON.stringify(data));
+        }
+        
+        function loadFormData() {
+            const s = localStorage.getItem('windooraFormDataSAR');
+            if (!s) return;
+            const d = JSON.parse(s);
+            
+            currentSystem = d.currentSystem || 'hinged';
+            currentLang = d.currentLang || 'ar';
+            rollerType = d.rollerType || 'single';
+            
+            if (d.hinged) {
+                document.getElementById('hingedWidth').value = d.hinged.width || 150;
+                document.getElementById('hingedHeight').value = d.hinged.height || 150;
+                document.getElementById('hingedColor').value = d.hinged.color || 'white';
+                document.getElementById('hingedDoorCount').value = d.hinged.doorCount || '2';
+                document.getElementById('hingedFrameType').value = d.hinged.frameType || '708';
+                document.getElementById('hingedWindowType').value = d.hinged.windowType || 'شباك';
+                document.getElementById('hingedOperationType').value = d.hinged.operationType || 'مفصلي';
+                document.getElementById('hingedFixedRight').value = d.hinged.fixedRight || 0;
+                document.getElementById('hingedFixedLeft').value = d.hinged.fixedLeft || 0;
+                document.getElementById('hingedFixedTop').value = d.hinged.fixedTop || 0;
+                document.getElementById('hingedFixedBottom').value = d.hinged.fixedBottom || 0;
+            }
+            
+            if (d.sliding) {
+                document.getElementById('slidingWidth').value = d.sliding.width || 200;
+                document.getElementById('slidingHeight').value = d.sliding.height || 150;
+                document.getElementById('slidingColor').value = d.sliding.color || 'white';
+                document.getElementById('slidingDoorCount').value = d.sliding.doorCount || '2';
+                document.getElementById('slidingSystem').value = d.sliding.system || 'kompen';
+                document.getElementById('slidingFrameType').value = d.sliding.frameType || 'withoutBar';
+                document.getElementById('slidingWindowType').value = d.sliding.windowType || 'شباك';
+                document.getElementById('slidingWithMesh').checked = d.sliding.withMesh || false;
+                document.getElementById('slidingWithRoller').checked = d.sliding.withRoller !== false;
+                document.getElementById('slidingExtras').value = d.sliding.extras || 0;
+                
+                const mg = document.getElementById('slidingWithMesh').closest('.checkbox-group');
+                const rg = document.getElementById('slidingWithRoller').closest('.checkbox-group');
+                if (d.sliding.withMesh) mg.classList.add('checked'); else mg.classList.remove('checked');
+                if (d.sliding.withRoller !== false) rg.classList.add('checked'); else rg.classList.remove('checked');
+            }
+            
+            document.querySelectorAll('#rollerTypeSection .radio-item').forEach((item, i) => {
+                item.classList.remove('selected');
+                if ((rollerType === 'single' && i === 0) || (rollerType === 'double' && i === 1)) item.classList.add('selected');
+            });
+            
+            switchSystem(currentSystem);
+        }
+        
+        // ==================== حساب المفصلي ====================
+        function calculateHinged() {
+            const width = getVal('hingedWidth'), height = getVal('hingedHeight');
+            const color = document.getElementById('hingedColor').value;
+            const frameType = document.getElementById('hingedFrameType').value;
+            const windowType = document.getElementById('hingedWindowType').value;
+            const opType = document.getElementById('hingedOperationType').value;
+            const doorCount = parseInt(document.getElementById('hingedDoorCount').value);
+            const fixedR = getVal('hingedFixedRight'), fixedL = getVal('hingedFixedLeft');
+            const fixedT = getVal('hingedFixedTop'), fixedB = getVal('hingedFixedBottom');
+            
+            const profile = HINGED_PROFILES[frameType];
+            const isColored = color === 'colored';
+            const colorSuffix = isColored ? 'C' : 'W';
+            const isCraft = profile.system === 'craft';
+            
+            const framePrice = getVal('price' + frameType + colorSuffix);
+            const sashPrice = isCraft ? getVal('priceSashCraft' + colorSuffix) : getVal('priceSash' + colorSuffix);
+            const doorPrice = isCraft ? getVal('priceDoorCraft' + colorSuffix) : getVal('priceDoor' + colorSuffix);
+            const sawasPrice = isCraft ? getVal('priceSawasCraft' + colorSuffix) : getVal('priceSawas' + colorSuffix);
+            const teePrice = isCraft ? getVal('priceTeeCraft' + colorSuffix) : getVal('priceTee' + colorSuffix);
+            const bakitaPrice = isCraft ? getVal('priceBakitaCraft' + colorSuffix) : getVal('priceBakita' + colorSuffix);
+            const glassPrice = getVal('priceGlass');
+            const wastePercent = getVal('wastePercent');
+            const profitPerM2 = getVal('profitPerM2');
+            const wasteFactor = 1 + (wastePercent / 100);
+            
+            const frameW = width + profile.frameAddition;
+            const frameH = height + profile.frameAddition;
+            const frameLM = ((frameW * 2) + (frameH * 2)) / 100;
+            
+            const openingW = width - (profile.frameDiscount * 2) - fixedR - fixedL;
+            const openingH = height - (profile.frameDiscount * 2) - fixedT - fixedB;
+            
+            let sashW = (doorCount === 1 || windowType === 'باب') ? openingW + profile.overlap + profile.clearance : ((openingW + profile.overlap - profile.clearance) / 2) + profile.clearance;
+            let sashH = openingH + profile.overlap + profile.clearance;
+            let sashLM = ((sashW * 2 + sashH * 2) * doorCount) / 100;
+            
+            const glassDiscount = windowType === 'شباك' ? profile.glassDiscountWindow : profile.glassDiscountDoor;
+            const glassW = sashW - glassDiscount;
+            const glassH = sashH - glassDiscount;
+            const glassArea = (glassW * glassH * doorCount) / 10000;
+            
+            const bakitaW = glassW + profile.bakitaAddition;
+            const bakitaH = glassH + profile.bakitaAddition;
+            const bakitaLM = (((bakitaW + bakitaH) * 2) * doorCount) / 100;
+            
+            let teeLM = (doorCount === 2 && windowType !== 'باب') ? (sashH - profile.teeDiscount) / 100 : 0;
+            let teeH = teeLM > 0 ? sashH - profile.teeDiscount : 0;
+            
+            let sawasLM = 0, sawasDetails = [];
+            if (fixedR > 0) { const v = height - (profile.frameDiscount * 2) - profile.sawasDiscount; sawasLM += v / 100; sawasDetails.push({name: getText('سؤاس يمين', 'Right Mullion'), val: v}); }
+            if (fixedL > 0) { const v = height - (profile.frameDiscount * 2) - profile.sawasDiscount; sawasLM += v / 100; sawasDetails.push({name: getText('سؤاس شمال', 'Left Mullion'), val: v}); }
+            if (fixedT > 0) { const v = width - (profile.frameDiscount * 2) - profile.sawasDiscount; sawasLM += v / 100; sawasDetails.push({name: getText('سؤاس علوي', 'Top Mullion'), val: v}); }
+            if (fixedB > 0) { const v = width - (profile.frameDiscount * 2) - profile.sawasDiscount; sawasLM += v / 100; sawasDetails.push({name: getText('سؤاس سفلي', 'Bottom Mullion'), val: v}); }
+            
+            let fixedGlass = [], fixedBakita = [];
+            if (fixedR > 0) { const gw = fixedR - 1, gh = height - (profile.frameDiscount * 2) - 1; fixedGlass.push({name: getText('زجاج ثابت يمين', 'Right Fixed Glass'), w: gw, h: gh}); fixedBakita.push({name: getText('باكته ثابت يمين', 'Right Fixed Bead'), w: gw + 1, h: gh + 1}); }
+            if (fixedL > 0) { const gw = fixedL - 1, gh = height - (profile.frameDiscount * 2) - 1; fixedGlass.push({name: getText('زجاج ثابت شمال', 'Left Fixed Glass'), w: gw, h: gh}); fixedBakita.push({name: getText('باكته ثابت شمال', 'Left Fixed Bead'), w: gw + 1, h: gh + 1}); }
+            if (fixedT > 0) { const gw = width - (profile.frameDiscount * 2) - 1, gh = fixedT - 1; fixedGlass.push({name: getText('زجاج ثابت علوي', 'Top Fixed Glass'), w: gw, h: gh}); fixedBakita.push({name: getText('باكته ثابت علوي', 'Top Fixed Bead'), w: gw + 1, h: gh + 1}); }
+            if (fixedB > 0) { const gw = width - (profile.frameDiscount * 2) - 1, gh = fixedB - 1; fixedGlass.push({name: getText('زجاج ثابت سفلي', 'Bottom Fixed Glass'), w: gw, h: gh}); fixedBakita.push({name: getText('باكته ثابت سفلي', 'Bottom Fixed Bead'), w: gw + 1, h: gh + 1}); }
+            
+            let totalFixedGlassArea = 0; fixedGlass.forEach(g => totalFixedGlassArea += (g.w * g.h) / 10000);
+            let totalFixedBakitaLM = 0; fixedBakita.forEach(b => totalFixedBakitaLM += ((b.w + b.h) * 2) / 100);
+            const totalGlassArea = glassArea + totalFixedGlassArea;
+            const totalBakitaLM = bakitaLM + totalFixedBakitaLM;
+            
+            const frameCost = frameLM * wasteFactor * framePrice;
+            const sashCost = sashLM * wasteFactor * (windowType === 'باب' ? doorPrice : sashPrice);
+            const teeCost = teeLM * wasteFactor * teePrice;
+            const sawasCost = sawasLM * wasteFactor * sawasPrice;
+            const glassCost = totalGlassArea * glassPrice;
+            const bakitaCost = totalBakitaLM * wasteFactor * bakitaPrice;
+            
+            const accResult = calculateHingedAccessories(windowType, opType, doorCount, height);
+            const accCost = accResult.total;
+            
+            let area = (width * height) / 10000; if (area < 1) area = 1;
+            const totalCost = frameCost + sashCost + teeCost + sawasCost + glassCost + bakitaCost + accCost;
+            const profit = profitPerM2 * area;
+            const finalPrice = totalCost + profit;
+            const pricePerMeter = finalPrice / area;
+            
+            document.getElementById('hingedFinalPrice').textContent = finalPrice.toFixed(2);
+            document.getElementById('hingedPricePerMeter').textContent = '📐 ' + getText('سعر المتر:', 'Price/m²:') + ' ' + pricePerMeter.toFixed(2) + ' ' + getCurrency() + '/' + getText('م²', 'm²');
+            document.getElementById('hingedBadgeArea').textContent = area.toFixed(2) + getText(' م²', ' m²');
+            document.getElementById('hingedBadgeSystem').textContent = (isCraft ? getText('كرافت', 'Craft') : getText('كومبن', 'Kompen')) + ' | ' + (isColored ? getText('ألوان', 'Colored') : getText('أبيض', 'White'));
+            
+            const t = { lm: getText('م.ط', 'LM'), sqm: getText('م²', 'm²'), sar: getCurrency(), total: getText('إجمالي', 'Total'), cm: 'سم' };
+            const profileName = currentLang === 'ar' ? profile.name : profile.nameEn;
+            const systemLabel = isCraft ? '🔷 ' + getText('كرافت', 'Craft') : '✅ ' + getText('كومبن', 'Kompen');
+            const colorLabel = isColored ? '🎨 ' + getText('ألوان', 'Colored') : '⬜ ' + getText('أبيض', 'White');
+            
+            let html = `<div class="results-grid">
+                <div class="result-box"><h3>🏗️ ${getText('مقاسات الحلق', 'Frame')}</h3>
+                    <div class="result-item"><span class="result-label">${getText('العرض', 'Width')}</span><span class="result-value">${frameW.toFixed(1)} ${t.cm} × 2</span></div>
+                    <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${frameH.toFixed(1)} ${t.cm} × 2</span></div>
+                    <div class="summary-total">📏 ${t.total}: ${frameLM.toFixed(2)} ${t.lm} | ${frameCost.toFixed(2)} ${t.sar}</div>
+                </div>
+                <div class="result-box green"><h3>🚪 ${getText('مقاسات الضلفة', 'Sash')}</h3>
+                    <div class="result-item"><span class="result-label">${getText('العرض', 'Width')}</span><span class="result-value">${sashW.toFixed(1)} ${t.cm} × ${doorCount * 2}</span></div>
+                    <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${sashH.toFixed(1)} ${t.cm} × ${doorCount * 2}</span></div>
+                    <div class="summary-total green">📏 ${t.total}: ${sashLM.toFixed(2)} ${t.lm} | ${sashCost.toFixed(2)} ${t.sar}</div>
+                </div>`;
+            
+            if (teeLM > 0) {
+                html += `<div class="result-box blue"><h3>🔗 ${getText('البوكلير', 'T-Profile')}</h3>
+                    <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${teeH.toFixed(1)} ${t.cm}</span></div>
+                    <div class="summary-total">📏 ${teeLM.toFixed(2)} ${t.lm} | ${teeCost.toFixed(2)} ${t.sar}</div>
+                </div>`;
+            }
+            
+            if (sawasDetails.length > 0) {
+                html += `<div class="result-box orange"><h3>📐 ${getText('السؤاس', 'Mullion')}</h3>
+                    ${sawasDetails.map(s => `<div class="result-item"><span class="result-label">${s.name}</span><span class="result-value">${s.val.toFixed(1)} ${t.cm}</span></div>`).join('')}
+                    <div class="summary-total orange">📏 ${sawasLM.toFixed(2)} ${t.lm} | ${sawasCost.toFixed(2)} ${t.sar}</div>
+                </div>`;
+            }
+            
+            html += `<div class="result-box cyan"><h3>🔲 ${getText('الزجاج', 'Glass')}</h3>
+                <div class="result-item"><span class="result-label">${getText('زجاج الضلفة', 'Sash Glass')}</span><span class="result-value">${glassW.toFixed(1)} × ${glassH.toFixed(1)} (×${doorCount})</span></div>
+                ${fixedGlass.map(g => `<div class="result-item"><span class="result-label">${g.name}</span><span class="result-value">${g.w.toFixed(1)} × ${g.h.toFixed(1)}</span></div>`).join('')}
+                <div class="summary-total">📐 ${t.total}: ${totalGlassArea.toFixed(4)} ${t.sqm} | ${glassCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            html += `<div class="result-box"><h3>📦 ${getText('الباكته', 'Bead')}</h3>
+                <div class="result-item"><span class="result-label">${getText('باكته الضلفة', 'Sash Bead')}</span><span class="result-value">${bakitaW.toFixed(1)} × ${bakitaH.toFixed(1)} (×${doorCount})</span></div>
+                ${fixedBakita.map(b => `<div class="result-item"><span class="result-label">${b.name}</span><span class="result-value">${b.w.toFixed(1)} × ${b.h.toFixed(1)}</span></div>`).join('')}
+                <div class="summary-total">📏 ${t.total}: ${totalBakitaLM.toFixed(2)} ${t.lm} | ${bakitaCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            html += `<div class="result-box pink"><h3>🔧 ${getText('الإكسسوارات', 'Accessories')}</h3>
+                ${accResult.items.map(i => `<div class="result-item"><span class="result-label">${i.name} (×${i.qty})</span><span class="result-value">${i.total.toFixed(2)} ${t.sar}</span></div>`).join('')}
+                <div class="summary-total pink">💰 ${t.total}: ${accCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            html += `</div>
+            <div class="result-box" style="margin-top:12px;background:linear-gradient(135deg,#1a1a2e,#2d2d44);color:white;border:none;">
+                <h3 style="color:white;">💵 ${profileName} | ${systemLabel} | ${colorLabel}</h3>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('المساحة', 'Area')}</span><span class="result-value" style="color:var(--secondary);">${area.toFixed(2)} ${t.sqm}</span></div>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('إجمالي التكلفة', 'Total Cost')}</span><span class="result-value" style="color:white;">${totalCost.toFixed(2)} ${t.sar}</span></div>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('الربح', 'Profit')}</span><span class="result-value" style="color:var(--success);">${profit.toFixed(2)} ${t.sar}</span></div>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('سعر المتر المربع', 'Price per m²')}</span><span class="result-value" style="color:#00CEC9;">${pricePerMeter.toFixed(2)} ${t.sar}/${t.sqm}</span></div>
+                <div class="result-item" style="border:none;"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('السعر النهائي', 'Final Price')}</span><span class="result-value" style="color:var(--warning);font-size:1.3em;">${finalPrice.toFixed(2)} ${t.sar}</span></div>
+            </div>`;
+            
+            document.getElementById('hingedResults').innerHTML = html;
+        }
+        
+        function calculateHingedAccessories(windowType, opType, doorCount, height) {
+            let items = [], total = 0;
+            
+            if (windowType === 'باب') {
+                const lockType = height <= 180 ? '160' : '180';
+                const lockPrice = getVal('priceLock' + lockType);
+                items.push({name: '🔐 ' + getText('سنترلوك', 'Lock') + ' ' + lockType, qty: 1, price: lockPrice, total: lockPrice});
+                total += lockPrice;
+                
+                const handlePrice = getVal('priceDoorHandle');
+                items.push({name: '🔑 ' + getText('مقبض باب', 'Door Handle'), qty: 1, price: handlePrice, total: handlePrice});
+                total += handlePrice;
+                
+                const hingePrice = getVal('priceHinge');
+                items.push({name: '🔩 ' + getText('مفصلة', 'Hinge'), qty: 4, price: hingePrice, total: hingePrice * 4});
+                total += hingePrice * 4;
+            } else {
+                const esp = getESP(height);
+                const espPrice = getVal('priceESP' + esp.size);
+                items.push({name: '📏 ' + getText('سبالونة', 'ESP') + ' ' + esp.size, qty: doorCount, price: espPrice, total: espPrice * doorCount});
+                total += espPrice * doorCount;
+                
+                const strikerPrice = getVal('priceStriker');
+                items.push({name: '🔩 ' + getText('سكاك', 'Striker'), qty: esp.hooks, price: strikerPrice, total: strikerPrice * esp.hooks});
+                total += strikerPrice * esp.hooks;
+                
+                const handlePrice = getVal('priceWinHandle');
+                items.push({name: '🔑 ' + getText('مقبض شباك', 'Win Handle'), qty: 1, price: handlePrice, total: handlePrice});
+                total += handlePrice;
+                
+                const hingeCount = height <= 120 ? 2 : height <= 200 ? 3 : 4;
+                const hingePrice = getVal('priceHinge');
+                items.push({name: '🔩 ' + getText('مفصلة', 'Hinge'), qty: hingeCount * doorCount, price: hingePrice, total: hingePrice * hingeCount * doorCount});
+                total += hingePrice * hingeCount * doorCount;
+                
+                if (opType === 'قلاب') {
+                    const tiltPrice = getVal('priceTiltArm');
+                    items.push({name: '💪 ' + getText('ذراع قلاب', 'Tilt Arm'), qty: 1, price: tiltPrice, total: tiltPrice});
+                    total += tiltPrice;
+                }
+                
+                if (doorCount === 2) {
+                    const shootPrice = getVal('priceShootbolt');
+                    items.push({name: '🔒 ' + getText('ترباس', 'Shootbolt'), qty: 2, price: shootPrice, total: shootPrice * 2});
+                    total += shootPrice * 2;
+                }
+                
+                if (doorCount === 2 || opType === 'ثابت+مفصلي') {
+                    const capPrice = getVal('priceMullionCap');
+                    items.push({name: '🧢 ' + getText('نهاية قائم', 'Cap'), qty: 2, price: capPrice, total: capPrice * 2});
+                    total += capPrice * 2;
+                }
+            }
+            
+            return {items, total};
+        }
+        
+        // ==================== حساب السحاب ====================
+        function calculateSliding() {
+            const width = getVal('slidingWidth'), height = getVal('slidingHeight');
+            const color = document.getElementById('slidingColor').value;
+            const system = document.getElementById('slidingSystem').value;
+            const frameType = document.getElementById('slidingFrameType').value;
+            const windowType = document.getElementById('slidingWindowType').value;
+            const doorCount = parseInt(document.getElementById('slidingDoorCount').value);
+            const withMesh = document.getElementById('slidingWithMesh').checked;
+            const withRoller = document.getElementById('slidingWithRoller').checked;
+            const extras = getVal('slidingExtras');
+            
+            const isColored = color === 'colored';
+            const colorSuffix = isColored ? 'C' : 'W';
+            const isKompen = system === 'kompen';
+            const profile = SLIDING_PROFILES[system];
+            const prefix = isKompen ? 'Kompen' : 'Craft';
+            
+            const framePrice = frameType === 'withBar' ? getVal('slidingFrameBar' + prefix + colorSuffix) : getVal('slidingFrame' + prefix + colorSuffix);
+            
+            let sashPrice;
+            if (isKompen) {
+                sashPrice = windowType === 'باب' ? getVal('slidingDoor' + prefix + colorSuffix) : getVal('slidingSash' + prefix + colorSuffix);
+            } else {
+                sashPrice = getVal('slidingSash' + prefix + colorSuffix);
+            }
+            
+            const meshPrice = getVal('slidingMesh' + prefix + colorSuffix);
+            const trackPrice = getVal('slidingTrack' + prefix + colorSuffix);
+            
+            let tobbaPrice;
+            if (isKompen) {
+                tobbaPrice = windowType === 'باب' ? getVal('slidingTobbaLarge' + prefix + colorSuffix) : getVal('slidingTobbaSmall' + prefix + colorSuffix);
+            } else {
+                tobbaPrice = getVal('slidingTobba' + prefix + colorSuffix);
+            }
+            
+            const interlockPrice = getVal('slidingInterlock' + prefix + colorSuffix);
+            const bakitaPrice = getVal('slidingBakita' + prefix + colorSuffix);
+            const glassPrice = getVal('priceGlass');
+            const wastePercent = getVal('wastePercent');
+            const profitPerM2 = getVal('profitPerM2');
+            const wasteFactor = 1 + (wastePercent / 100);
+            
+            const frameAddition = profile[frameType].frameAddition;
+            const frameW = width + frameAddition;
+            const frameH = height + frameAddition;
+            const frameLM = ((frameW * 2) + (frameH * 2)) / 100;
+            
+            let sashW, sashH, meshW, meshH;
+            if (isKompen) {
+                const sashKey = doorCount === 2 ? (windowType === 'باب' ? 'sash2Door' : 'sash2Window') : (windowType === 'باب' ? 'sash4Door' : 'sash4Window');
+                const meshKey = doorCount === 2 ? (windowType === 'باب' ? 'mesh2Door' : 'mesh2Window') : (windowType === 'باب' ? 'mesh4Door' : 'mesh4Window');
+                sashW = profile[sashKey].widthFormula(width);
+                sashH = height - profile[sashKey].heightDiscount;
+                meshW = profile[meshKey].widthFormula(width);
+                meshH = height - profile[meshKey].heightDiscount;
+            } else {
+                sashW = profile.sash.widthFormula(width);
+                sashH = height - profile.sash.heightDiscount;
+                meshW = profile.mesh.widthFormula(width);
+                meshH = height - profile.mesh.heightDiscount;
+            }
+            
+            const sashLM = ((sashW * 2 + sashH * 2) * doorCount) / 100;
+            const meshLM = withMesh ? ((meshW * 2 + meshH * 2)) / 100 : 0;
+            
+            const glassDiscount = isKompen ? (windowType === 'باب' ? profile.glassDiscountDoor : profile.glassDiscountWindow) : profile.glassDiscount;
+            const glassW = sashW - glassDiscount;
+            const glassH = sashH - glassDiscount;
+            const glassArea = (glassW * glassH * doorCount) / 10000;
+            
+            const bakitaW = glassW + profile.bakitaAddition;
+            const bakitaH = glassH + profile.bakitaAddition;
+            const bakitaLM = (((bakitaW + bakitaH) * 2) * doorCount) / 100;
+            
+            const trackLength = width - profile.trackDiscount;
+            const trackLM = (trackLength * 2) / 100;
+            
+            const tobbaCount = doorCount;
+            const tobbaLM = (sashH * tobbaCount) / 100;
+            
+            const interlockLM = doorCount === 4 ? (sashH / 100) : 0;
+            
+            const frameCost = frameLM * wasteFactor * framePrice;
+            const sashCost = sashLM * wasteFactor * sashPrice;
+            const meshCost = meshLM * wasteFactor * meshPrice;
+            const glassCost = glassArea * glassPrice;
+            const bakitaCost = bakitaLM * wasteFactor * bakitaPrice;
+            const trackCost = trackLM * wasteFactor * trackPrice;
+            const tobbaCost = tobbaLM * wasteFactor * tobbaPrice;
+            const interlockCost = interlockLM * wasteFactor * interlockPrice;
+            
+            const accResult = calculateSlidingAccessories(windowType, doorCount, height, withRoller);
+            const accCost = accResult.total;
+            
+            let area = (width * height) / 10000; if (area < 1) area = 1;
+            const extrasCost = extras * area;
+            const totalCost = frameCost + sashCost + meshCost + glassCost + bakitaCost + trackCost + tobbaCost + interlockCost + accCost + extrasCost;
+            const profit = profitPerM2 * area;
+            const finalPrice = totalCost + profit;
+            const pricePerMeter = finalPrice / area;
+            
+            document.getElementById('slidingFinalPrice').textContent = finalPrice.toFixed(2);
+            document.getElementById('slidingPricePerMeter').textContent = '📐 ' + getText('سعر المتر:', 'Price/m²:') + ' ' + pricePerMeter.toFixed(2) + ' ' + getCurrency() + '/' + getText('م²', 'm²');
+            document.getElementById('slidingBadgeArea').textContent = area.toFixed(2) + getText(' م²', ' m²');
+            document.getElementById('slidingBadgeSystem').textContent = (isKompen ? getText('كومبن', 'Kompen') : getText('كرافت', 'Craft')) + ' | ' + (isColored ? getText('ألوان', 'Colored') : getText('أبيض', 'White'));
+            
+            const t = { lm: getText('م.ط', 'LM'), sqm: getText('م²', 'm²'), sar: getCurrency(), total: getText('إجمالي', 'Total'), cm: 'سم' };
+            const systemLabel = isKompen ? '✅ ' + getText('كومبن', 'Kompen') : '🔷 ' + getText('كرافت', 'Craft');
+            const colorLabel = isColored ? '🎨 ' + getText('ألوان', 'Colored') : '⬜ ' + getText('أبيض', 'White');
+            const frameLabel = frameType === 'withBar' ? getText('بالبار', 'With Bar') : getText('بدون بار', 'Without Bar');
+            let tobbaTypeLabel = '';
+            if (isKompen) tobbaTypeLabel = ' (' + (windowType === 'باب' ? getText('كبيرة', 'Large') : getText('صغيرة', 'Small')) + ')';
+            
+            let html = `<div class="results-grid">
+                <div class="result-box"><h3>🏗️ ${getText('الحلق', 'Frame')} ${frameLabel}</h3>
+                    <div class="result-item"><span class="result-label">${getText('العرض', 'Width')}</span><span class="result-value">${frameW.toFixed(1)} ${t.cm} × 2</span></div>
+                    <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${frameH.toFixed(1)} ${t.cm} × 2</span></div>
+                    <div class="summary-total">📏 ${frameLM.toFixed(2)} ${t.lm} | ${frameCost.toFixed(2)} ${t.sar}</div>
+                </div>
+                <div class="result-box green"><h3>🚪 ${getText('الضلفة', 'Sash')}</h3>
+                    <div class="result-item"><span class="result-label">${getText('العرض', 'Width')}</span><span class="result-value">${sashW.toFixed(1)} ${t.cm} × ${doorCount * 2}</span></div>
+                    <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${sashH.toFixed(1)} ${t.cm} × ${doorCount * 2}</span></div>
+                    <div class="summary-total green">📏 ${sashLM.toFixed(2)} ${t.lm} | ${sashCost.toFixed(2)} ${t.sar}</div>
+                </div>`;
+            
+            if (withMesh) {
+                html += `<div class="result-box blue"><h3>🪟 ${getText('ضلفة السلك', 'Mesh')}</h3>
+                    <div class="result-item"><span class="result-label">${getText('العرض', 'Width')}</span><span class="result-value">${meshW.toFixed(1)} ${t.cm}</span></div>
+                    <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${meshH.toFixed(1)} ${t.cm}</span></div>
+                    <div class="summary-total">📏 ${meshLM.toFixed(2)} ${t.lm} | ${meshCost.toFixed(2)} ${t.sar}</div>
+                </div>`;
+            }
+                        html += `<div class="result-box"><h3>📏 ${getText('التراك', 'Track')}</h3>
+                <div class="result-item"><span class="result-label">${getText('الطول', 'Length')}</span><span class="result-value">${trackLength.toFixed(1)} ${t.cm} × 2</span></div>
+                <div class="summary-total">📏 ${trackLM.toFixed(2)} ${t.lm} | ${trackCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            html += `<div class="result-box orange"><h3>🔪 ${getText('الطبة/السكينة', 'Tobba')}${tobbaTypeLabel}</h3>
+                <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${sashH.toFixed(1)} ${t.cm} × ${tobbaCount}</span></div>
+                <div class="result-item"><span class="result-label">${getText('الإجمالي', 'Total')}</span><span class="result-value">${tobbaLM.toFixed(2)} ${t.lm}</span></div>
+                <div class="summary-total orange">📏 ${tobbaLM.toFixed(2)} ${t.lm} | ${tobbaCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            if (doorCount === 4) {
+                html += `<div class="result-box blue"><h3>🔗 ${getText('التقابل', 'Interlock')}</h3>
+                    <div class="result-item"><span class="result-label">${getText('الارتفاع', 'Height')}</span><span class="result-value">${sashH.toFixed(1)} ${t.cm}</span></div>
+                    <div class="summary-total">📏 ${interlockLM.toFixed(2)} ${t.lm} | ${interlockCost.toFixed(2)} ${t.sar}</div>
+                </div>`;
+            }
+            
+            html += `<div class="result-box cyan"><h3>🔲 ${getText('الزجاج', 'Glass')}</h3>
+                <div class="result-item"><span class="result-label">${getText('القياس', 'Size')}</span><span class="result-value">${glassW.toFixed(1)} × ${glassH.toFixed(1)} (×${doorCount})</span></div>
+                <div class="summary-total">📐 ${glassArea.toFixed(4)} ${t.sqm} | ${glassCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            html += `<div class="result-box"><h3>📦 ${getText('الباكته', 'Bead')}</h3>
+                <div class="result-item"><span class="result-label">${getText('القياس', 'Size')}</span><span class="result-value">${bakitaW.toFixed(1)} × ${bakitaH.toFixed(1)} (×${doorCount})</span></div>
+                <div class="summary-total">📏 ${bakitaLM.toFixed(2)} ${t.lm} | ${bakitaCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            html += `<div class="result-box pink"><h3>🔧 ${getText('الإكسسوارات', 'Accessories')}</h3>
+                ${accResult.items.map(i => `<div class="result-item"><span class="result-label">${i.name} (×${i.qty})</span><span class="result-value">${i.total.toFixed(2)} ${t.sar}</span></div>`).join('')}
+                <div class="summary-total pink">💰 ${t.total}: ${accCost.toFixed(2)} ${t.sar}</div>
+            </div>`;
+            
+            if (extras > 0) {
+                html += `<div class="result-box"><h3>➕ ${getText('الإضافات', 'Extras')}</h3>
+                    <div class="result-item"><span class="result-label">${extras} ${t.sar} × ${area.toFixed(2)} ${t.sqm}</span><span class="result-value">${extrasCost.toFixed(2)} ${t.sar}</span></div>
+                </div>`;
+            }
+            
+            html += `</div>
+            <div class="result-box" style="margin-top:12px;background:linear-gradient(135deg,#1a1a2e,#2d2d44);color:white;border:none;">
+                <h3 style="color:white;">💵 ${getText('سحاب', 'Sliding')} ${doorCount} ${getText('ضلفة', 'Sash')} | ${systemLabel} | ${colorLabel}</h3>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('المساحة', 'Area')}</span><span class="result-value" style="color:var(--secondary);">${area.toFixed(2)} ${t.sqm}</span></div>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('إجمالي التكلفة', 'Total Cost')}</span><span class="result-value" style="color:white;">${totalCost.toFixed(2)} ${t.sar}</span></div>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('الربح', 'Profit')}</span><span class="result-value" style="color:var(--success);">${profit.toFixed(2)} ${t.sar}</span></div>
+                <div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('سعر المتر المربع', 'Price per m²')}</span><span class="result-value" style="color:#00CEC9;">${pricePerMeter.toFixed(2)} ${t.sar}/${t.sqm}</span></div>
+                <div class="result-item" style="border:none;"><span class="result-label" style="color:rgba(255,255,255,0.7);">${getText('السعر النهائي', 'Final Price')}</span><span class="result-value" style="color:var(--warning);font-size:1.3em;">${finalPrice.toFixed(2)} ${t.sar}</span></div>
+            </div>`;
+            
+            document.getElementById('slidingResults').innerHTML = html;
+        }
+        
+        function calculateSlidingAccessories(windowType, doorCount, height, withRoller) {
+            let items = [], total = 0;
+            
+            const esp = getESP(height);
+            const espCount = doorCount === 2 ? 2 : 3;
+            const espPrice = getVal('priceSlidingESP' + esp.size);
+            items.push({name: '📏 ' + getText('سبالونة', 'ESP') + ' ' + esp.size, qty: espCount, price: espPrice, total: espPrice * espCount});
+            total += espPrice * espCount;
+            
+            if (withRoller) {
+                const rollerCount = doorCount === 2 ? 4 : 8;
+                const rollerPrice = rollerType === 'double' ? getVal('priceRollerDouble') : getVal('priceRollerSingle');
+                const rollerName = rollerType === 'double' ? '🔘 ' + getText('عجل دبل', 'Double Roller') : '🔘 ' + getText('عجل سنجل', 'Single Roller');
+                items.push({name: rollerName, qty: rollerCount, price: rollerPrice, total: rollerPrice * rollerCount});
+                total += rollerPrice * rollerCount;
+            }
+            
+            const handleDPrice = getVal('priceHandleD');
+            const handleFPrice = getVal('priceHandleFlush');
+            items.push({name: '🔑 ' + getText('مقبض بارز', 'D-Handle'), qty: 1, price: handleDPrice, total: handleDPrice});
+            total += handleDPrice;
+            
+            const flushCount = doorCount === 2 ? 1 : 2;
+            items.push({name: '🔑 ' + getText('مقبض غاطس', 'Flush Handle'), qty: flushCount, price: handleFPrice, total: handleFPrice * flushCount});
+            total += handleFPrice * flushCount;
+            
+            const antiLiftCount = doorCount === 2 ? 2 : 4;
+            const antiLiftPrice = getVal('priceAntiLift');
+            items.push({name: '🔒 ' + getText('مانع رفع', 'Anti-Lift'), qty: antiLiftCount, price: antiLiftPrice, total: antiLiftPrice * antiLiftCount});
+            total += antiLiftPrice * antiLiftCount;
+            
+            return {items, total};
+        }
+        
+        // ==================== التهيئة ====================
+        window.onload = function() {
+            loadTheme();
+            loadPrices();
+            loadFormData();
+            loadLanguage();
+            toggleRollerType();
+            
+            if (!localStorage.getItem('windooraFormDataSAR')) {
+                calculateHinged();
+            }
+        };
     </script>
 </body>
 </html>
