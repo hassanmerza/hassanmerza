@@ -1326,12 +1326,8 @@
                     </div>
                 </div>
             </div>
-            <div class="settings-buttons">
-                <button class="btn btn-success" onclick="savePrices()">💾 <span data-ar="حفظ" data-en="Save"></span></button>
-                <button class="btn btn-warning" onclick="resetPrices()">🔄 <span data-ar="إعادة ضبط" data-en="Reset"></span></button>
-                <button class="btn btn-dark" onclick="changePassword()">🔑 <span data-ar="كلمة السر" data-en="Password"></span></button>
-            </div>
-        </div>
+            <div class<div class="settings-buttons"> <button class="btn btn-success" onclick="savePrices()">💾 <span data-ar="حفظ" data-en="Save"></span></button> <button class="btn" style="background:linear-gradient(135deg,#4facfe,#00f2fe);color:#065f46;" onclick="exportPrices()">📥 <span data-ar="تصدير" data-en="Export"></span></button> <button class="btn" style="background:linear-gradient(135deg,#fa709a,#fee140);color:#92400e;" onclick="document.getElementById('importFile').click()">📤 <span data-ar="استيراد" data-en="Import"></span></button> <input type="file" id="importFile" accept=".json" style="display:none" onchange="importPrices(event)"> <button class="btn btn-warning" onclick="resetPrices()">🔄 <span data-ar="إعادة ضبط" data-en="Reset"></span></button> <button class="btn btn-dark" onclick="changePassword()">🔑 <span data-ar="كلمة السر" data-en="Password"></span></button>            </div>
+       </div>
     </div>
     
     <script>
@@ -2081,7 +2077,49 @@
             
             return {items, total};
         }
-        
+// ==================== تصدير الأسعار ====================
+function exportPrices() {
+    const inputs = document.querySelectorAll('.settings-body input');
+    const prices = {};
+    inputs.forEach(input => {
+        if (input.id) prices[input.id] = parseFloat(input.value) || 0;
+    });
+    const data = { 
+        version: "2.0", 
+        currency: "SAR",
+        exportDate: new Date().toISOString(), 
+        prices: prices 
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'windoora-prices.json';
+    a.click();
+    const n = document.getElementById('saveNotification');
+    n.querySelector('span').textContent = getText('تم تصدير الأسعار', 'Prices Exported');
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 2500);
+}
+
+// ==================== استيراد الأسعار ====================
+function importPrices(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (!data.prices) { alert(getText('❌ ملف غير صالح!', '❌ Invalid file!')); return; }
+            Object.keys(data.prices).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = data.prices[id];
+            });
+            savePrices();
+        } catch (err) { alert(getText('❌ خطأ في قراءة الملف!', '❌ Error reading file!')); }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
         // ==================== التهيئة ====================
         window.onload = function() {
             loadTheme();
