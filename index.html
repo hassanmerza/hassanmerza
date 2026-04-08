@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"><head>
+<html lang="ar" dir="rtl">
+<head>
     <meta charset="UTF-8">
     <!-- ✅ ضبط الـ Viewport للموبايل -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -8,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <title>🏭 Windoora - نظام حساب الشبابيك والأبواب</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* ═══════════════════════════════════════════════════════════
@@ -1310,6 +1311,55 @@
             break-inside: avoid;
         }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* جدول الإضافات في الـ PDF - لون #f39c12 */
+/* ═══════════════════════════════════════════════════════════ */
+
+#pdfExtrasSection {
+    margin: 12px 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+#pdfExtrasSection .pdf-section-title {
+    background: rgba(243, 156, 18, 0.15) !important;
+    border-color: #f39c12 !important;
+    color: #e67e22 !important;
+    font-weight: 800;
+}
+
+#pdfExtrasSection table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+}
+
+#pdfExtrasSection table th {
+    background: #f39c12 !important;
+    color: white !important;
+    font-weight: 800;
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 12px;
+    border: 1px solid #e67e22;
+}
+
+#pdfExtrasSection table td {
+    padding: 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* ✅ لون صفوف الإضافات */
+#pdfExtrasSection table tbody tr {
+    background-color: rgba(243, 156, 18, 0.12) !important;
+}
+
+#pdfExtrasSection table tbody tr:nth-child(even) {
+    background-color: rgba(243, 156, 18, 0.06) !important;
+}
+
         /* ═══════════════════════════════════════════════════════════ */
         /* تصميم الـ Header */
         /* ═══════════════════════════════════════════════════════════ */
@@ -1645,22 +1695,27 @@
             const extras = currentQuote.extras || [];
             const validExtras = extras.filter(e => e.price > 0 || (e.description && e.description.trim()));
             
-            if (validExtras.length > 0) {
-                document.getElementById('pdfExtrasSection').style.display = 'block';
-                let extrasHtml = '';
-                validExtras.forEach((ex, i) => {
-                    extrasHtml += `<tr>
-                        <td style="font-weight:800;">${i + 1}</td>
-                        <td style="text-align:right;direction:rtl;">${ex.description || '---'}</td>
-                        <td style="font-weight:700;">${formatCurrencyShort(ex.price || 0)}</td>
-                        <td style="font-weight:700;">${ex.qty || 1}</td>
-                        <td style="color:#27ae60;font-weight:800;">${formatCurrencyShort(ex.total || 0)}</td>
-                    </tr>`;
-                });
-                document.getElementById('pdfExtrasBody').innerHTML = extrasHtml;
-            } else {
-                document.getElementById('pdfExtrasSection').style.display = 'none';
-            }
+            const extras = currentQuote.extras || [];
+const validExtras = extras.filter(e => e.price > 0 || (e.description && e.description.trim()));
+
+// ✅ التعديل هنا: لو فيه إضافة واحدة أو أكتر
+if (validExtras.length > 0) {
+    document.getElementById('pdfExtrasSection').style.display = 'block';
+    let extrasHtml = '';
+    validExtras.forEach((ex, i) => {
+        // ✅ تغيير لون الصف إلى #f39c12
+        extrasHtml += `<tr style="background-color: rgba(243, 156, 18, 0.15);">
+            <td style="font-weight:800; color:#e67e22;">${i + 1}</td>
+            <td style="text-align:right;direction:rtl; color:#2c3e50; font-weight:700;">${ex.description || '---'}</td>
+            <td style="font-weight:700; color:#e67e22;">${formatCurrencyShort(ex.price || 0)}</td>
+            <td style="font-weight:700; color:#e67e22;">${ex.qty || 1}</td>
+            <td style="color:#27ae60;font-weight:800;">${formatCurrencyShort(ex.total || (ex.price * (ex.qty || 1)) || 0)}</td>
+        </tr>`;
+    });
+    document.getElementById('pdfExtrasBody').innerHTML = extrasHtml;
+} else {
+    document.getElementById('pdfExtrasSection').style.display = 'none';
+}
 
             // الإجماليات
             document.getElementById('pdfTotalUnits').textContent = currentQuote.units.length;
@@ -1741,16 +1796,16 @@
         }
     </script>
 </head>
-    
-
-<body data-theme="dark">
+    </style>
+</head>
+<body data-theme="light">
     <!-- إشعار الحفظ -->
     <div class="save-notification" id="saveNotification">✅ <span data-ar="تم الحفظ بنجاح" data-en="Saved successfully">تم الحفظ بنجاح</span></div>
 
     <!-- الأزرار العائمة -->
     <div class="floating-btns">
         <button class="float-btn lang-toggle" onclick="toggleLanguage()" aria-label="تغيير اللغة">EN</button>
-        <button class="float-btn theme-toggle" onclick="toggleTheme()" aria-label="تغيير الثيم">☀️</button>
+        <button class="float-btn theme-toggle" onclick="toggleTheme()" aria-label="تغيير الثيم">🌙</button>
     </div>
 
     <!-- قفل كلمة السر -->
@@ -1762,7 +1817,7 @@
             <input type="password" id="passwordInput" placeholder="••••" maxlength="10" onkeypress="if(event.key==='Enter')checkPassword()" inputmode="numeric">
             <button class="btn btn-success" onclick="checkPassword()">🔓 <span data-ar="فتح" data-en="Open">فتح</span></button>
             <button class="btn" style="background:var(--border);color:var(--text-medium);" onclick="closeLock()"><span data-ar="إلغاء" data-en="Cancel">إلغاء</span></button>
-            <p class="error-msg" id="errorMsg" style="display: none;">⚠️ كلمة السر غير صحيحة</p>
+            <p class="error-msg" id="errorMsg">⚠️ كلمة السر غير صحيحة</p>
         </div>
     </div>
 
@@ -1770,7 +1825,7 @@
     <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="القائمة">☰</button>
 
     <!-- overlay للسايدبار -->
-    <div class="sidebar-overlay show" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
     <!-- QUOTE BAR -->
     <div class="quote-bar" id="quoteBar">
@@ -1806,11 +1861,11 @@
     </div>
 
     <!-- SIDEBAR -->
-    <div class="sidebar open" id="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">🏭</div>
             <div class="sidebar-title">Windoora</div>
-            <div class="sidebar-subtitle" data-ar="نظام حساب الشبابيك والأبواب" data-en="Windows &amp; Doors Calculator">نظام حساب الشبابيك والأبواب</div>
+            <div class="sidebar-subtitle" data-ar="نظام حساب الشبابيك والأبواب" data-en="Windows & Doors Calculator">نظام حساب الشبابيك والأبواب</div>
             <div class="currency-badge">🇪🇬 الجنيه المصري</div>
         </div>
         
@@ -1897,18 +1952,18 @@
                         <div class="card-title" data-ar="نوع النظام" data-en="System Type">نوع النظام</div>
                     </div>
                     <div class="radio-group" id="hingedSystemType">
-                        <div class="radio-item" onclick="setHingedSystem('kompen')">
-                            <input type="radio" name="hingedSystem" value="kompen" checked="">
+                        <div class="radio-item selected" onclick="setHingedSystem('kompen')">
+                            <input type="radio" name="hingedSystem" value="kompen" checked>
                             <span>✅ كومبن</span>
                         </div>
-                        <div class="radio-item selected" onclick="setHingedSystem('craft')">
+                        <div class="radio-item" onclick="setHingedSystem('craft')">
                             <input type="radio" name="hingedSystem" value="craft">
                             <span>🔷 كرافت</span>
                         </div>
                     </div>
                     <div class="input-group" style="margin-top:12px;">
                         <label>🖼️ <span data-ar="نوع الحلق" data-en="Frame Type">نوع الحلق</span></label>
-                        <select id="hingedFrameType" onchange="calculateHinged();saveFormData();"><option value="710">بالبار (710)</option><option value="711">بدون بار (711)</option></select>
+                        <select id="hingedFrameType" onchange="calculateHinged();saveFormData();"></select>
                     </div>
                 </div>
 
@@ -1936,11 +1991,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="input-group" id="hingedDoorCountGroup" style="display: block;">
+                    <div class="input-group" id="hingedDoorCountGroup">
                         <label>🔢 <span data-ar="عدد الضلف" data-en="Sash Count">عدد الضلف</span></label>
                         <select id="hingedDoorCount" onchange="calculateHinged();saveFormData();">
                             <option value="1">1 ضلفة</option>
-                            <option value="2" selected="">2 ضلفة</option>
+                            <option value="2" selected>2 ضلفة</option>
                         </select>
                     </div>
                 </div>
@@ -1958,7 +2013,7 @@
                                 <span id="hingedSelectedGlassText" data-ar="اختر نوع الزجاج" data-en="Select Glass">اختر نوع الزجاج</span>
                                 <span>▼</span>
                             </div>
-                            <div class="glass-dropdown" id="hingedGlassDropdown"><div class="glass-category">شفاف</div><div class="glass-option" data-id="Clear5" onclick="selectGlass('hinged','Clear5')">شفاف 5 مم</div><div class="glass-option" data-id="Clear6" onclick="selectGlass('hinged','Clear6')">شفاف 6 مم</div><div class="glass-category">مصنفر</div><div class="glass-option" data-id="Frosted5" onclick="selectGlass('hinged','Frosted5')">مصنفر 5 مم</div><div class="glass-option" data-id="Frosted6" onclick="selectGlass('hinged','Frosted6')">مصنفر 6 مم</div><div class="glass-option" data-id="FrostedML5" onclick="selectGlass('hinged','FrostedML5')">مصنفر مس لايت 5 مم</div><div class="glass-category">سان جوبان</div><div class="glass-option" data-id="ReflectiveWhite5SG" onclick="selectGlass('hinged','ReflectiveWhite5SG')">عاكس ابيض 5 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveWhite6SG" onclick="selectGlass('hinged','ReflectiveWhite6SG')">عاكس ابيض 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBrown5SG" onclick="selectGlass('hinged','ReflectiveBrown5SG')">عاكس بني 5 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBrown6SG" onclick="selectGlass('hinged','ReflectiveBrown6SG')">عاكس بني 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlack5SG" onclick="selectGlass('hinged','ReflectiveBlack5SG')">عاكس اسود 5 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlack6SG" onclick="selectGlass('hinged','ReflectiveBlack6SG')">عاكس اسود 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlueDark6SG" onclick="selectGlass('hinged','ReflectiveBlueDark6SG')">عاكس ازرق غامق 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlueLight6SG" onclick="selectGlass('hinged','ReflectiveBlueLight6SG')">عاكس ازرق فاتح 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveGreen6SG" onclick="selectGlass('hinged','ReflectiveGreen6SG')">عاكس اخضر 6 مم سان جوبان</div><div class="glass-category">سفنكس</div><div class="glass-option" data-id="ReflectiveWhite5SF" onclick="selectGlass('hinged','ReflectiveWhite5SF')">عاكس ابيض 5 مم سفنكس</div><div class="glass-option" data-id="ReflectiveWhite6SF" onclick="selectGlass('hinged','ReflectiveWhite6SF')">عاكس ابيض 6 مم سفنكس</div><div class="glass-category">صيني</div><div class="glass-option" data-id="ReflectiveBrown5CH" onclick="selectGlass('hinged','ReflectiveBrown5CH')">عاكس بني 5 مم صيني</div><div class="glass-option" data-id="ReflectiveBrown6CH" onclick="selectGlass('hinged','ReflectiveBrown6CH')">عاكس بني 6 مم صيني</div><div class="glass-option" data-id="ReflectiveGreenDark6CH" onclick="selectGlass('hinged','ReflectiveGreenDark6CH')">عاكس اخضر غامق 6 مم صيني</div><div class="glass-category">أخرى</div><div class="glass-option" data-id="ReflectiveBlueDark5" onclick="selectGlass('hinged','ReflectiveBlueDark5')">عاكس ازرق غامق 5 مم</div><div class="glass-category">فاميه</div><div class="glass-option" data-id="Fumee5" onclick="selectGlass('hinged','Fumee5')">فاميه 5 مم</div><div class="glass-option" data-id="Fumee6" onclick="selectGlass('hinged','Fumee6')">فاميه 6 مم</div></div>
+                            <div class="glass-dropdown" id="hingedGlassDropdown"></div>
                         </div>
                     </div>
                     <div class="input-group">
@@ -2019,14 +2074,14 @@
                     <div class="price-badge-content">
                         <div class="price-badge-icon">💰</div>
                         <div class="price-badge-label" data-ar="السعر الإجمالي" data-en="Total Price">السعر الإجمالي</div>
-                        <div class="price-badge-value"><span id="hingedFinalPrice">314.27</span> ج.م</div>
+                        <div class="price-badge-value"><span id="hingedFinalPrice">0.00</span> ج.م</div>
                         <div class="price-badge-secondary">
-                            <div class="price-per-meter" id="hingedPricePerMeter">📐 سعر المتر: 174.59 ج.م/م²</div>
+                            <div class="price-per-meter" id="hingedPricePerMeter">📐 سعر المتر: 0.00 ج.م/م²</div>
                         </div>
                         <div class="price-badge-info">
-                            <span id="hingedBadgeArea">1.80 م²</span>
+                            <span id="hingedBadgeArea">0.00 م²</span>
                             <span>|</span>
-                            <span id="hingedBadgeSystem">كرافت | أبيض | سنجل</span>
+                            <span id="hingedBadgeSystem">كومبن | أبيض | سنجل</span>
                         </div>
                         <div class="price-badge-actions" id="hingedQuoteActions">
                             <button class="btn-add-to-quote" onclick="addCurrentUnitToQuote()">
@@ -2042,7 +2097,7 @@
                         <div class="card-icon purple">📊</div>
                         <div class="card-title" data-ar="التفاصيل" data-en="Details">التفاصيل</div>
                     </div>
-                    <div id="hingedResults"><div class="results-grid"><div class="result-box"><h3>🏗️ الحلق</h3><div class="result-item"><span class="result-label">العرض</span><span class="result-value">130.6 سم × 2</span></div><div class="result-item"><span class="result-label">الارتفاع</span><span class="result-value">160.6 سم × 2</span></div><div class="summary-total">📏 5.82 م.ط | 61.15 ج.م</div></div><div class="result-box green"><h3>🚪 الضلفة</h3><div class="result-item"><span class="result-label">العرض</span><span class="result-value">32.3 سم × 4</span></div><div class="result-item"><span class="result-label">الارتفاع</span><span class="result-value">94.6 سم × 4</span></div><div class="summary-total green">📏 5.08 م.ط | 53.30 ج.م</div></div><div class="result-box orange"><h3>📐 السؤاس</h3><div class="result-item"><span class="result-label">سؤاس يمين</span><span class="result-value">138.2 سم</span></div><div class="result-item"><span class="result-label">سؤاس سفلي</span><span class="result-value">108.2 سم</span></div><div class="summary-total orange">📏 2.46 م.ط | 25.87 ج.م</div></div><div class="result-box cyan"><h3>🔲 الزجاج (سنجل)</h3><div class="result-item"><span class="result-label">النوع</span><span class="result-value">غير محدد</span></div><div class="result-item"><span class="result-label">السعر/م²</span><span class="result-value">0.00 ج.م</span></div><div class="result-item"><span class="result-label">زجاج الضلفة</span><span class="result-value">14.8 × 77.1 (×2)</span></div><div class="result-item"><span class="result-label">زجاج ثابت يمين</span><span class="result-value">49.0 × 141.4</span></div><div class="result-item"><span class="result-label">زجاج ثابت سفلي</span><span class="result-value">111.4 × 49.0</span></div><div class="summary-total">📐 1.4669 م² | 0.00 ج.م</div></div><div class="result-box"><h3>📦 الباكته</h3><div class="result-item"><span class="result-label">باكته الضلفة</span><span class="result-value">15.8 × 78.1 (×2)</span></div><div class="result-item"><span class="result-label">باكته ثابت يمين</span><span class="result-value">50.0 × 142.4</span></div><div class="result-item"><span class="result-label">باكته ثابت سفلي</span><span class="result-value">112.4 × 50.0</span></div><div class="summary-total">📏 10.85 م.ط | 113.95 ج.م</div></div><div class="result-box pink"><h3>🔧 الإكسسوارات</h3><div class="result-item"><span class="result-label">🔐 سنترلوك 160 (×1)</span><span class="result-value">10.00 ج.م</span></div><div class="result-item"><span class="result-label">🔑 مقبض باب (×1)</span><span class="result-value">10.00 ج.م</span></div><div class="result-item"><span class="result-label">🔩 مفصلة (×4)</span><span class="result-value">40.00 ج.م</span></div><div class="summary-total pink">💰 60.00 ج.م</div></div></div><div class="result-box" style="margin-top:12px;background:linear-gradient(135deg,#1a1a2e,#2d2d44);color:white;border:none;"><h3 style="color:white;">💵 بالبار (710) | كرافت | أبيض</h3><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">المساحة</span><span class="result-value" style="color:#9b59b6;">1.80 م²</span></div><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">إجمالي التكلفة</span><span class="result-value">314.27 ج.م</span></div><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">الربح</span><span class="result-value" style="color:#27ae60;">0.00 ج.م</span></div><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">سعر المتر²</span><span class="result-value" style="color:#f39c12;">174.59 ج.م</span></div><div class="result-item" style="border:none;"><span class="result-label" style="color:rgba(255,255,255,0.7);">السعر النهائي</span><span class="result-value" style="color:#f39c12;font-size:1.2em;">314.27 ج.م</span></div></div></div>
+                    <div id="hingedResults"></div>
                 </div>
             </div>
         </div>
@@ -2083,7 +2138,7 @@
                     </div>
                     <div class="radio-group" id="slidingSystemType">
                         <div class="radio-item selected" onclick="setSlidingSystem('kompen')">
-                            <input type="radio" name="slidingSystem" value="kompen" checked="">
+                            <input type="radio" name="slidingSystem" value="kompen" checked>
                             <span>✅ كومبن</span>
                         </div>
                         <div class="radio-item" onclick="setSlidingSystem('craft')">
@@ -2117,7 +2172,7 @@
                         <div class="input-group">
                             <label>🔢 <span data-ar="عدد الضلف" data-en="Sash Count">عدد الضلف</span></label>
                             <select id="slidingDoorCount" onchange="calculateSliding();saveFormData();">
-                                <option value="2" selected="">2 ضلفة</option>
+                                <option value="2" selected>2 ضلفة</option>
                                 <option value="4">4 ضلفة</option>
                             </select>
                         </div>
@@ -2127,15 +2182,15 @@
                         <label>🦟 <span data-ar="مع ناموسية" data-en="With Mesh">مع ناموسية</span></label>
                     </div>
                     <div class="checkbox-group checked" onclick="toggleCheckbox(this,'slidingWithRoller')">
-                        <input type="checkbox" id="slidingWithRoller" checked="">
+                        <input type="checkbox" id="slidingWithRoller" checked>
                         <label>🎡 <span data-ar="مع عجل" data-en="With Roller">مع عجل</span></label>
                     </div>
-                    <div id="rollerTypeSection" style="margin-top: 10px; display: block;">
+                    <div id="rollerTypeSection" style="margin-top:10px;">
                         <div class="radio-group" id="rollerTypeGroup">
-                            <div class="radio-item" onclick="selectRoller('single')">
+                            <div class="radio-item selected" onclick="selectRoller('single')">
                                 <span>عجل سنجل</span>
                             </div>
-                            <div class="radio-item selected" onclick="selectRoller('double')">
+                            <div class="radio-item" onclick="selectRoller('double')">
                                 <span>عجل دبل</span>
                             </div>
                         </div>
@@ -2152,10 +2207,10 @@
                         <label>🪟 <span data-ar="نوع الزجاج" data-en="Glass Type">نوع الزجاج</span></label>
                         <div class="glass-select-wrapper">
                             <div class="glass-select" onclick="toggleGlassDropdown('sliding')">
-                                <span id="slidingSelectedGlassText" data-ar="اختر نوع الزجاج" data-en="Select Glass">شفاف 5 مم</span>
+                                <span id="slidingSelectedGlassText" data-ar="اختر نوع الزجاج" data-en="Select Glass">اختر نوع الزجاج</span>
                                 <span>▼</span>
                             </div>
-                            <div class="glass-dropdown" id="slidingGlassDropdown"><div class="glass-category">شفاف</div><div class="glass-option" data-id="Clear5" onclick="selectGlass('sliding','Clear5')">شفاف 5 مم</div><div class="glass-option" data-id="Clear6" onclick="selectGlass('sliding','Clear6')">شفاف 6 مم</div><div class="glass-category">مصنفر</div><div class="glass-option" data-id="Frosted5" onclick="selectGlass('sliding','Frosted5')">مصنفر 5 مم</div><div class="glass-option" data-id="Frosted6" onclick="selectGlass('sliding','Frosted6')">مصنفر 6 مم</div><div class="glass-option" data-id="FrostedML5" onclick="selectGlass('sliding','FrostedML5')">مصنفر مس لايت 5 مم</div><div class="glass-category">سان جوبان</div><div class="glass-option" data-id="ReflectiveWhite5SG" onclick="selectGlass('sliding','ReflectiveWhite5SG')">عاكس ابيض 5 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveWhite6SG" onclick="selectGlass('sliding','ReflectiveWhite6SG')">عاكس ابيض 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBrown5SG" onclick="selectGlass('sliding','ReflectiveBrown5SG')">عاكس بني 5 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBrown6SG" onclick="selectGlass('sliding','ReflectiveBrown6SG')">عاكس بني 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlack5SG" onclick="selectGlass('sliding','ReflectiveBlack5SG')">عاكس اسود 5 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlack6SG" onclick="selectGlass('sliding','ReflectiveBlack6SG')">عاكس اسود 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlueDark6SG" onclick="selectGlass('sliding','ReflectiveBlueDark6SG')">عاكس ازرق غامق 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveBlueLight6SG" onclick="selectGlass('sliding','ReflectiveBlueLight6SG')">عاكس ازرق فاتح 6 مم سان جوبان</div><div class="glass-option" data-id="ReflectiveGreen6SG" onclick="selectGlass('sliding','ReflectiveGreen6SG')">عاكس اخضر 6 مم سان جوبان</div><div class="glass-category">سفنكس</div><div class="glass-option" data-id="ReflectiveWhite5SF" onclick="selectGlass('sliding','ReflectiveWhite5SF')">عاكس ابيض 5 مم سفنكس</div><div class="glass-option" data-id="ReflectiveWhite6SF" onclick="selectGlass('sliding','ReflectiveWhite6SF')">عاكس ابيض 6 مم سفنكس</div><div class="glass-category">صيني</div><div class="glass-option" data-id="ReflectiveBrown5CH" onclick="selectGlass('sliding','ReflectiveBrown5CH')">عاكس بني 5 مم صيني</div><div class="glass-option" data-id="ReflectiveBrown6CH" onclick="selectGlass('sliding','ReflectiveBrown6CH')">عاكس بني 6 مم صيني</div><div class="glass-option" data-id="ReflectiveGreenDark6CH" onclick="selectGlass('sliding','ReflectiveGreenDark6CH')">عاكس اخضر غامق 6 مم صيني</div><div class="glass-category">أخرى</div><div class="glass-option" data-id="ReflectiveBlueDark5" onclick="selectGlass('sliding','ReflectiveBlueDark5')">عاكس ازرق غامق 5 مم</div><div class="glass-category">فاميه</div><div class="glass-option" data-id="Fumee5" onclick="selectGlass('sliding','Fumee5')">فاميه 5 مم</div><div class="glass-option" data-id="Fumee6" onclick="selectGlass('sliding','Fumee6')">فاميه 6 مم</div></div>
+                            <div class="glass-dropdown" id="slidingGlassDropdown"></div>
                         </div>
                     </div>
                     <div class="input-group">
@@ -2188,12 +2243,12 @@
                     <div class="price-badge-content">
                         <div class="price-badge-icon">💰</div>
                         <div class="price-badge-label" data-ar="السعر الإجمالي" data-en="Total Price">السعر الإجمالي</div>
-                        <div class="price-badge-value"><span id="slidingFinalPrice">789.21</span> ج.م</div>
+                        <div class="price-badge-value"><span id="slidingFinalPrice">0.00</span> ج.م</div>
                         <div class="price-badge-secondary">
-                            <div class="price-per-meter" id="slidingPricePerMeter">📐 سعر المتر: 98.65 ج.م/م²</div>
+                            <div class="price-per-meter" id="slidingPricePerMeter">📐 سعر المتر: 0.00 ج.م/م²</div>
                         </div>
                         <div class="price-badge-info">
-                            <span id="slidingBadgeArea">8.00 م²</span>
+                            <span id="slidingBadgeArea">0.00 م²</span>
                             <span>|</span>
                             <span id="slidingBadgeSystem">كومبن | أبيض | سنجل</span>
                         </div>
@@ -2211,7 +2266,7 @@
                         <div class="card-icon purple">📊</div>
                         <div class="card-title" data-ar="التفاصيل" data-en="Details">التفاصيل</div>
                     </div>
-                    <div id="slidingResults"><div class="results-grid"><div class="result-box"><h3>🏗️ الحلق</h3><div class="result-item"><span class="result-label">العرض</span><span class="result-value">411.2 × 2</span></div><div class="result-item"><span class="result-label">الارتفاع</span><span class="result-value">211.2 × 2</span></div><div class="summary-total">📏 12.45 م.ط | 130.70 ج.م</div></div><div class="result-box green"><h3>🚪 الضلفة</h3><div class="result-item"><span class="result-label">العرض</span><span class="result-value">103.5 × 8</span></div><div class="result-item"><span class="result-label">الارتفاع</span><span class="result-value">192.8 × 8</span></div><div class="summary-total green">📏 23.70 م.ط | 0.00 ج.م</div></div><div class="result-box blue"><h3>🛤️ التراك</h3><div class="result-item"><span class="result-label">الطول</span><span class="result-value">390.6 × 2</span></div><div class="summary-total">📏 7.81 م.ط | 82.03 ج.م</div></div><div class="result-box orange"><h3>🔪 طبة كبيرة</h3><div class="result-item"><span class="result-label">الارتفاع</span><span class="result-value">192.8 × 4</span></div><div class="summary-total orange">📏 7.71 م.ط | 0.00 ج.م</div></div><div class="result-box teal"><h3>🔗 التقابل</h3><div class="result-item"><span class="result-label">الارتفاع</span><span class="result-value">192.8 × 1</span></div><div class="summary-total teal">📏 1.93 م.ط | 0.00 ج.م</div></div><div class="result-box cyan"><h3>🔲 الزجاج (سنجل)</h3><div class="result-item"><span class="result-label">النوع</span><span class="result-value">شفاف 5 مم</span></div><div class="result-item"><span class="result-label">السعر/م²</span><span class="result-value">10.00 ج.م</span></div><div class="result-item"><span class="result-label">المقاس</span><span class="result-value">86.0 × 175.3 (×4)</span></div><div class="summary-total">📐 6.0303 م² | 60.30 ج.م</div></div><div class="result-box"><h3>📦 الباكته</h3><div class="result-item"><span class="result-label">المقاس</span><span class="result-value">87.0 × 176.3 (×4)</span></div><div class="summary-total">📏 21.06 م.ط | 221.17 ج.م</div></div><div class="result-box pink"><h3>🔧 الإكسسوارات</h3><div class="result-item"><span class="result-label">📏 سبالونة 1800 (×3)</span><span class="result-value">30.00 ج.م</span></div><div class="result-item"><span class="result-label">🔩 سكاك (×16)</span><span class="result-value">160.00 ج.م</span></div><div class="result-item"><span class="result-label">🎡 عجل دبل (×8)</span><span class="result-value">80.00 ج.م</span></div><div class="result-item"><span class="result-label">🔑 مقبض بارز (×1)</span><span class="result-value">1.00 ج.م</span></div><div class="result-item"><span class="result-label">🔑 مقبض غاطس (×2)</span><span class="result-value">20.00 ج.م</span></div><div class="result-item"><span class="result-label">🔒 مانع رفع (×4)</span><span class="result-value">4.00 ج.م</span></div><div class="summary-total pink">💰 295.00 ج.م</div></div></div><div class="result-box" style="margin-top:12px;background:linear-gradient(135deg,#1a1a2e,#2d2d44);color:white;border:none;"><h3 style="color:white;">💵 سحاب 4 ضلفة | كومبن | أبيض</h3><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">المساحة</span><span class="result-value" style="color:#9b59b6;">8.00 م²</span></div><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">إجمالي التكلفة</span><span class="result-value">789.21 ج.م</span></div><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">الربح</span><span class="result-value" style="color:#27ae60;">0.00 ج.م</span></div><div class="result-item" style="border-color:rgba(255,255,255,0.1);"><span class="result-label" style="color:rgba(255,255,255,0.7);">سعر المتر²</span><span class="result-value" style="color:#f39c12;">98.65 ج.م</span></div><div class="result-item" style="border:none;"><span class="result-label" style="color:rgba(255,255,255,0.7);">السعر النهائي</span><span class="result-value" style="color:#f39c12;font-size:1.2em;">789.21 ج.م</span></div></div></div>
+                    <div id="slidingResults"></div>
                 </div>
             </div>
         </div>
@@ -2246,7 +2301,7 @@
             <div class="quote-modal-body">
                 <div class="input-group">
                     <label><span>👤</span> <span data-ar="اسم العميل" data-en="Client Name">اسم العميل</span> *</label>
-                    <input type="text" id="quoteClientName" placeholder="أدخل اسم العميل" required="">
+                    <input type="text" id="quoteClientName" placeholder="أدخل اسم العميل" required>
                 </div>
                 <div class="input-row">
                     <div class="input-group">
@@ -2269,7 +2324,7 @@
                     </div>
                     <div class="input-group">
                         <label><span>🔢</span> <span data-ar="رقم العرض" data-en="Quote Number">رقم العرض</span></label>
-                        <input type="text" id="quoteNumber" readonly="">
+                        <input type="text" id="quoteNumber" readonly>
                     </div>
                 </div>
                 <div class="input-group">
@@ -2454,7 +2509,7 @@
                 </p>
                 <div style="background:var(--border);padding:14px;border-radius:var(--radius-sm);margin-bottom:14px;">
                     <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.9em;">
-                        <span data-ar="الوصف الحالي:" data-en="Current:">الوصف الحالي:</span>
+                        <span data-ar="الوصف الحالي:" data-en="Current:">ا��وصف الحالي:</span>
                         <strong id="editUnitDescription" style="max-width:60%;text-align:left;word-break:break-word;">---</strong>
                     </div>
                     <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.9em;">
@@ -2491,7 +2546,7 @@
         </div>
     </div>
         <!-- SETTINGS PANEL -->
-    <div class="settings-panel show" id="settingsPanel">
+    <div class="settings-panel" id="settingsPanel">
         <div class="settings-container">
             <div class="settings-header">
                 <h2>⚙️ <span data-ar="إعدادات الأسعار" data-en="Price Settings">إعدادات الأسعار</span></h2>
@@ -2499,19 +2554,19 @@
             </div>
             <div class="settings-body">
                 <div class="settings-tabs">
-                    <button class="settings-tab" onclick="switchSettingsTab('general',this)">💎 عام</button>
+                    <button class="settings-tab active" onclick="switchSettingsTab('general',this)">💎 عام</button>
                     <button class="settings-tab" onclick="switchSettingsTab('glass',this)">🪟 الزجاج</button>
                     <button class="settings-tab" onclick="switchSettingsTab('discount',this)">💰 خصومات</button>
                     <button class="settings-tab" onclick="switchSettingsTab('kompen',this)">✅ كومبن</button>
                     <button class="settings-tab" onclick="switchSettingsTab('craft',this)">🔷 كرافت</button>
                     <button class="settings-tab" onclick="switchSettingsTab('accessories',this)">🔧 إكسسوارات</button>
                     <button class="settings-tab" onclick="switchSettingsTab('sliding',this)">🔄 سحاب</button>
-                    <button class="settings-tab active" onclick="switchSettingsTab('slidingAcc',this)">🎡 إكسسوارات سحاب</button>
+                    <button class="settings-tab" onclick="switchSettingsTab('slidingAcc',this)">🎡 إكسسوارات سحاب</button>
                     <button class="settings-tab" onclick="switchSettingsTab('company',this)">🏢 الشركة</button>
                 </div>
                 
                 <!-- تاب عام -->
-                <div class="settings-tab-content" id="generalSettings">
+                <div class="settings-tab-content active" id="generalSettings">
                     <div class="settings-grid">
                         <div class="price-section">
                             <h4>💎 إعدادات عامة</h4>
@@ -2526,47 +2581,47 @@
                     <div class="settings-grid">
                         <div class="price-section ps-glass">
                             <h4>🔲 زجاج شفاف</h4>
-                            <div class="input-group"><label>شفاف 5 مم</label><input type="number" id="priceGlassClear5" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>شفاف 6 مم</label><input type="number" id="priceGlassClear6" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>شفاف 5 مم</label><input type="number" id="priceGlassClear5" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>شفاف 6 مم</label><input type="number" id="priceGlassClear6" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-glass">
                             <h4>🔲 زجاج مصنفر</h4>
-                            <div class="input-group"><label>مصنفر 5 مم</label><input type="number" id="priceGlassFrosted5" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>مصنفر 6 مم</label><input type="number" id="priceGlassFrosted6" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>مصنفر مس لايت 5 مم</label><input type="number" id="priceGlassFrostedML5" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مصنفر 5 مم</label><input type="number" id="priceGlassFrosted5" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مصنفر 6 مم</label><input type="number" id="priceGlassFrosted6" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مصنفر مس لايت 5 مم</label><input type="number" id="priceGlassFrostedML5" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-glass">
                             <h4>🔲 عاكس سان جوبان</h4>
-                            <div class="input-group"><label>عاكس ابيض 5 مم</label><input type="number" id="priceGlassReflectiveWhite5SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس ابيض 6 مم</label><input type="number" id="priceGlassReflectiveWhite6SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس بني 5 مم</label><input type="number" id="priceGlassReflectiveBrown5SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس بني 6 مم</label><input type="number" id="priceGlassReflectiveBrown6SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس اسود 5 مم</label><input type="number" id="priceGlassReflectiveBlack5SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس اسود 6 مم</label><input type="number" id="priceGlassReflectiveBlack6SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس ازرق غامق 6 مم</label><input type="number" id="priceGlassReflectiveBlueDark6SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس ازرق فاتح 6 مم</label><input type="number" id="priceGlassReflectiveBlueLight6SG" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس اخضر 6 مم</label><input type="number" id="priceGlassReflectiveGreen6SG" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس ابيض 5 مم</label><input type="number" id="priceGlassReflectiveWhite5SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس ابيض 6 مم</label><input type="number" id="priceGlassReflectiveWhite6SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس بني 5 مم</label><input type="number" id="priceGlassReflectiveBrown5SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس بني 6 مم</label><input type="number" id="priceGlassReflectiveBrown6SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس اسود 5 مم</label><input type="number" id="priceGlassReflectiveBlack5SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس اسود 6 مم</label><input type="number" id="priceGlassReflectiveBlack6SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس ازرق غامق 6 مم</label><input type="number" id="priceGlassReflectiveBlueDark6SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس ازرق فاتح 6 مم</label><input type="number" id="priceGlassReflectiveBlueLight6SG" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس اخضر 6 مم</label><input type="number" id="priceGlassReflectiveGreen6SG" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-glass">
                             <h4>🔲 عاكس سفنكس</h4>
-                            <div class="input-group"><label>عاكس ابيض 5 مم</label><input type="number" id="priceGlassReflectiveWhite5SF" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس ابيض 6 مم</label><input type="number" id="priceGlassReflectiveWhite6SF" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس ابيض 5 مم</label><input type="number" id="priceGlassReflectiveWhite5SF" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس ابيض 6 مم</label><input type="number" id="priceGlassReflectiveWhite6SF" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-glass">
                             <h4>🔲 عاكس صيني</h4>
-                            <div class="input-group"><label>عاكس بني 5 مم</label><input type="number" id="priceGlassReflectiveBrown5CH" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس بني 6 مم</label><input type="number" id="priceGlassReflectiveBrown6CH" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عاكس اخضر غامق 6 مم</label><input type="number" id="priceGlassReflectiveGreenDark6CH" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس بني 5 مم</label><input type="number" id="priceGlassReflectiveBrown5CH" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس بني 6 مم</label><input type="number" id="priceGlassReflectiveBrown6CH" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس اخضر غامق 6 مم</label><input type="number" id="priceGlassReflectiveGreenDark6CH" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-glass">
                             <h4>🔲 أنواع أخرى</h4>
-                            <div class="input-group"><label>عاكس ازرق غامق 5 مم</label><input type="number" id="priceGlassReflectiveBlueDark5" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>فاميه 5 مم</label><input type="number" id="priceGlassFumee5" value="010" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>فاميه 6 مم</label><input type="number" id="priceGlassFumee6" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عاكس ازرق غامق 5 مم</label><input type="number" id="priceGlassReflectiveBlueDark5" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>فاميه 5 مم</label><input type="number" id="priceGlassFumee5" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>فاميه 6 مم</label><input type="number" id="priceGlassFumee6" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-glass">
                             <h4>🔲 قيمة الدبل</h4>
-                            <div class="input-group"><label>قيمة الدبل (ج.م/م²)</label><input type="number" id="priceDoubleGlass" value="10" step="10" inputmode="decimal"></div>
+                            <div class="input-group"><label>قيمة الدبل (ج.م/م²)</label><input type="number" id="priceDoubleGlass" value="0" step="10" inputmode="decimal"></div>
                         </div>
                     </div>
                 </div>
@@ -2587,31 +2642,31 @@
                     <div class="settings-grid">
                         <div class="price-section ps-kompen">
                             <h4>✅ كومبن أبيض - الحلق</h4>
-                            <div class="input-group"><label>حلق 701 (ج.م/م.ط)</label><input type="number" id="price701W" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق 705 (ج.م/م.ط)</label><input type="number" id="price705W" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق 708 (ج.م/م.ط)</label><input type="number" id="price708W" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 701 (ج.م/م.ط)</label><input type="number" id="price701W" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 705 (ج.م/م.ط)</label><input type="number" id="price705W" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 708 (ج.م/م.ط)</label><input type="number" id="price708W" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-kompen">
                             <h4>✅ كومبن أبيض - الضلفة</h4>
-                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaW" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaW" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-kompen">
                             <h4>🎨 كومبن ألوان - الحلق</h4>
-                            <div class="input-group"><label>حلق 701 (ج.م/م.ط)</label><input type="number" id="price701C" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق 705 (ج.م/م.ط)</label><input type="number" id="price705C" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق 708 (ج.م/م.ط)</label><input type="number" id="price708C" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 701 (ج.م/م.ط)</label><input type="number" id="price701C" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 705 (ج.م/م.ط)</label><input type="number" id="price705C" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 708 (ج.م/م.ط)</label><input type="number" id="price708C" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-kompen">
                             <h4>🎨 كومبن ألوان - الضلفة</h4>
-                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaC" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaC" value="0" step="1" inputmode="decimal"></div>
                         </div>
                     </div>
                 </div>
@@ -2621,29 +2676,29 @@
                     <div class="settings-grid">
                         <div class="price-section ps-craft">
                             <h4>🔷 كرافت أبيض - الحلق</h4>
-                            <div class="input-group"><label>حلق 710 (ج.م/م.ط)</label><input type="number" id="price710W" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق 711 (ج.م/م.ط)</label><input type="number" id="price711W" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 710 (ج.م/م.ط)</label><input type="number" id="price710W" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 711 (ج.م/م.ط)</label><input type="number" id="price711W" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-craft">
                             <h4>🔷 كرافت أبيض - الضلفة</h4>
-                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashCraftW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorCraftW" value="010" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasCraftW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeCraftW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaCraftW" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashCraftW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorCraftW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasCraftW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeCraftW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaCraftW" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-craft">
                             <h4>🎨 كرافت ألوان - الحلق</h4>
-                            <div class="input-group"><label>حلق 710 (ج.م/م.ط)</label><input type="number" id="price710C" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق 711 (ج.م/م.ط)</label><input type="number" id="price711C" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 710 (ج.م/م.ط)</label><input type="number" id="price710C" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق 711 (ج.م/م.ط)</label><input type="number" id="price711C" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-craft">
                             <h4>🎨 كرافت ألوان - الضلفة</h4>
-                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashCraftC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorCraftC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasCraftC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeCraftC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaCraftC" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة شباك (ج.م/م.ط)</label><input type="number" id="priceSashCraftC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة باب (ج.م/م.ط)</label><input type="number" id="priceDoorCraftC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سؤاس (ج.م/م.ط)</label><input type="number" id="priceSawasCraftC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>بوكلير (ج.م/م.ط)</label><input type="number" id="priceTeeCraftC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته (ج.م/م.ط)</label><input type="number" id="priceBakitaCraftC" value="0" step="1" inputmode="decimal"></div>
                         </div>
                     </div>
                 </div>
@@ -2653,31 +2708,31 @@
                     <div class="settings-grid">
                         <div class="price-section ps-accessories">
                             <h4>🔧 إكسسوارات عامة</h4>
-                            <div class="input-group"><label>مفصلة (ج.م)</label><input type="number" id="priceHinge" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>مقبض شباك (ج.م)</label><input type="number" id="priceWinHandle" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>مقبض باب (ج.م)</label><input type="number" id="priceDoorHandle" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سكاك (ج.م)</label><input type="number" id="priceStriker" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ترباس (ج.م)</label><input type="number" id="priceShootbolt" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ذراع قلاب (ج.م)</label><input type="number" id="priceTiltArm" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>نهاية قائم (ج.م)</label><input type="number" id="priceMullionCap" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مفصلة (ج.م)</label><input type="number" id="priceHinge" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مقبض شباك (ج.م)</label><input type="number" id="priceWinHandle" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مقبض باب (ج.م)</label><input type="number" id="priceDoorHandle" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سكاك (ج.م)</label><input type="number" id="priceStriker" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ترباس (ج.م)</label><input type="number" id="priceShootbolt" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ذراع قلاب (ج.م)</label><input type="number" id="priceTiltArm" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>نهاية قائم (ج.م)</label><input type="number" id="priceMullionCap" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-accessories">
                             <h4>📏 سبالونة مفصلي</h4>
-                            <div class="input-group"><label>سبالونة 300 (ج.م)</label><input type="number" id="priceESP300" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 400 (ج.م)</label><input type="number" id="priceESP400" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 600 (ج.م)</label><input type="number" id="priceESP600" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 800 (ج.م)</label><input type="number" id="priceESP800" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1000 (ج.م)</label><input type="number" id="priceESP1000" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1200 (ج.م)</label><input type="number" id="priceESP1200" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1400 (ج.م)</label><input type="number" id="priceESP1400" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1600 (ج.م)</label><input type="number" id="priceESP1600" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1800 (ج.م)</label><input type="number" id="priceESP1800" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 2000 (ج.م)</label><input type="number" id="priceESP2000" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 300 (ج.م)</label><input type="number" id="priceESP300" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 400 (ج.م)</label><input type="number" id="priceESP400" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 600 (ج.م)</label><input type="number" id="priceESP600" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 800 (ج.م)</label><input type="number" id="priceESP800" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1000 (ج.م)</label><input type="number" id="priceESP1000" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1200 (ج.م)</label><input type="number" id="priceESP1200" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1400 (ج.م)</label><input type="number" id="priceESP1400" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1600 (ج.م)</label><input type="number" id="priceESP1600" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1800 (ج.م)</label><input type="number" id="priceESP1800" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 2000 (ج.م)</label><input type="number" id="priceESP2000" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-accessories">
                             <h4>🔐 أقفال الأبواب</h4>
-                            <div class="input-group"><label>سنترلوك 160 (ج.م)</label><input type="number" id="priceLock160" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سنترلوك 180 (ج.م)</label><input type="number" id="priceLock180" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سنترلوك 160 (ج.م)</label><input type="number" id="priceLock160" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سنترلوك 180 (ج.م)</label><input type="number" id="priceLock180" value="0" step="1" inputmode="decimal"></div>
                         </div>
                     </div>
                 </div>
@@ -2687,78 +2742,78 @@
                     <div class="settings-grid">
                         <div class="price-section ps-sliding">
                             <h4>✅ سحاب كومبن أبيض</h4>
-                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingKompenFrameW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingKompenFrameBarW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة شباك</label><input type="number" id="priceSlidingKompenSashW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة باب</label><input type="number" id="priceSlidingKompenDoorW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingKompenMeshW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingKompenTrackW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>طبة صغيرة</label><input type="number" id="priceSlidingKompenTobbaSmallW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>طبة كبيرة</label><input type="number" id="priceSlidingKompenTobbaLargeW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingKompenInterlockW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingKompenBakitaW" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingKompenFrameW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingKompenFrameBarW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة شباك</label><input type="number" id="priceSlidingKompenSashW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة باب</label><input type="number" id="priceSlidingKompenDoorW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingKompenMeshW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingKompenTrackW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>طبة صغيرة</label><input type="number" id="priceSlidingKompenTobbaSmallW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>طبة كبيرة</label><input type="number" id="priceSlidingKompenTobbaLargeW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingKompenInterlockW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingKompenBakitaW" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-sliding">
                             <h4>🎨 سحاب كومبن ألوان</h4>
-                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingKompenFrameC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingKompenFrameBarC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة شباك</label><input type="number" id="priceSlidingKompenSashC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة باب</label><input type="number" id="priceSlidingKompenDoorC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingKompenMeshC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingKompenTrackC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>طبة صغيرة</label><input type="number" id="priceSlidingKompenTobbaSmallC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>طبة كبيرة</label><input type="number" id="priceSlidingKompenTobbaLargeC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingKompenInterlockC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingKompenBakitaC" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingKompenFrameC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingKompenFrameBarC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة شباك</label><input type="number" id="priceSlidingKompenSashC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة باب</label><input type="number" id="priceSlidingKompenDoorC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingKompenMeshC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingKompenTrackC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>طبة صغيرة</label><input type="number" id="priceSlidingKompenTobbaSmallC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>طبة كبيرة</label><input type="number" id="priceSlidingKompenTobbaLargeC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingKompenInterlockC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingKompenBakitaC" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-craft">
                             <h4>🔷 سحاب كرافت أبيض</h4>
-                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingCraftFrameW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingCraftFrameBarW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة</label><input type="number" id="priceSlidingCraftSashW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingCraftMeshW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingCraftTrackW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>طبة</label><input type="number" id="priceSlidingCraftTobbaW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingCraftInterlockW" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingCraftBakitaW" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingCraftFrameW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingCraftFrameBarW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة</label><input type="number" id="priceSlidingCraftSashW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingCraftMeshW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingCraftTrackW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>طبة</label><input type="number" id="priceSlidingCraftTobbaW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingCraftInterlockW" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingCraftBakitaW" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-craft">
                             <h4>🎨 سحاب كرافت ألوان</h4>
-                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingCraftFrameC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingCraftFrameBarC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ضلفة</label><input type="number" id="priceSlidingCraftSashC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingCraftMeshC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingCraftTrackC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>طبة</label><input type="number" id="priceSlidingCraftTobbaC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingCraftInterlockC" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingCraftBakitaC" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بدون بار</label><input type="number" id="priceSlidingCraftFrameC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>حلق بالبار</label><input type="number" id="priceSlidingCraftFrameBarC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ضلفة</label><input type="number" id="priceSlidingCraftSashC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>ناموسية</label><input type="number" id="priceSlidingCraftMeshC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تراك</label><input type="number" id="priceSlidingCraftTrackC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>طبة</label><input type="number" id="priceSlidingCraftTobbaC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>تقابل</label><input type="number" id="priceSlidingCraftInterlockC" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>باكته</label><input type="number" id="priceSlidingCraftBakitaC" value="0" step="1" inputmode="decimal"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- تاب إكسسوارات السحاب -->
-                <div class="settings-tab-content active" id="slidingAccSettings">
+                <div class="settings-tab-content" id="slidingAccSettings">
                     <div class="settings-grid">
                         <div class="price-section ps-sliding-acc">
                             <h4>🎡 عجل وإكسسوارات السحاب</h4>
-                            <div class="input-group"><label>عجل سنجل (ج.م)</label><input type="number" id="priceRollerSingle" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>عجل دبل (ج.م)</label><input type="number" id="priceRollerDouble" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>مقبض بارز (ج.م)</label><input type="number" id="priceHandleD" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>مقبض غاطس (ج.م)</label><input type="number" id="priceHandleFlush" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>مانع رفع (ج.م)</label><input type="number" id="priceAntiLift" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سكاك سحاب (ج.م)</label><input type="number" id="priceSlidingStriker" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عجل سنجل (ج.م)</label><input type="number" id="priceRollerSingle" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>عجل دبل (ج.م)</label><input type="number" id="priceRollerDouble" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مقبض بارز (ج.م)</label><input type="number" id="priceHandleD" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مقبض غاطس (ج.م)</label><input type="number" id="priceHandleFlush" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>مانع رفع (ج.م)</label><input type="number" id="priceAntiLift" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سكاك سحاب (ج.م)</label><input type="number" id="priceSlidingStriker" value="0" step="1" inputmode="decimal"></div>
                         </div>
                         <div class="price-section ps-sliding-acc">
                             <h4>📏 سبالونات السحاب</h4>
-                            <div class="input-group"><label>سبالونة 400 (ج.م)</label><input type="number" id="priceSlidingESP400" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 600 (ج.م)</label><input type="number" id="priceSlidingESP600" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 800 (ج.م)</label><input type="number" id="priceSlidingESP800" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1000 (ج.م)</label><input type="number" id="priceSlidingESP1000" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1200 (ج.م)</label><input type="number" id="priceSlidingESP1200" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1400 (ج.م)</label><input type="number" id="priceSlidingESP1400" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1600 (ج.م)</label><input type="number" id="priceSlidingESP1600" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 1800 (ج.م)</label><input type="number" id="priceSlidingESP1800" value="10" step="1" inputmode="decimal"></div>
-                            <div class="input-group"><label>سبالونة 2000 (ج.م)</label><input type="number" id="priceSlidingESP2000" value="10" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 400 (ج.م)</label><input type="number" id="priceSlidingESP400" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 600 (ج.م)</label><input type="number" id="priceSlidingESP600" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 800 (ج.م)</label><input type="number" id="priceSlidingESP800" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1000 (ج.م)</label><input type="number" id="priceSlidingESP1000" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1200 (ج.م)</label><input type="number" id="priceSlidingESP1200" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1400 (ج.م)</label><input type="number" id="priceSlidingESP1400" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1600 (ج.م)</label><input type="number" id="priceSlidingESP1600" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 1800 (ج.م)</label><input type="number" id="priceSlidingESP1800" value="0" step="1" inputmode="decimal"></div>
+                            <div class="input-group"><label>سبالونة 2000 (ج.م)</label><input type="number" id="priceSlidingESP2000" value="0" step="1" inputmode="decimal"></div>
                         </div>
                     </div>
                 </div>
@@ -2778,10 +2833,7 @@
                         <div class="price-section ps-company">
                             <h4>📋 إعدادات عرض السعر</h4>
                             <div class="input-group"><label>مدة صلاحية العرض (أيام)</label><input type="number" id="quoteValidDays" value="7" min="1" max="90" inputmode="numeric"></div>
-                            <div class="input-group"><label>شروط الدفع الافتراضية</label><textarea id="defaultPaymentTerms" rows="4" placeholder="شروط الدفع..." value="• 50% مقدم عند التعاقد
-• 50% عند التسليم والتركيب
-• مدة التنفيذ: 15 يوم عمل
-• الضمان: سنة على التصنيع">• 50% مقدم عند التعاقد
+                            <div class="input-group"><label>شروط الدفع الافتراضية</label><textarea id="defaultPaymentTerms" rows="4" placeholder="شروط الدفع...">• 50% مقدم عند التعاقد
 • 50% عند التسليم والتركيب
 • مدة التنفيذ: 15 يوم عمل
 • الضمان: سنة على التصنيع</textarea></div>
@@ -5071,6 +5123,5 @@ function generateCuttingPDF() {
             console.log('✅ Windoora loaded successfully!');
         };
     </script>
-
 </body>
 </html>
